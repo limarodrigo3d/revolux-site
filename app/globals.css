@@ -1,20 +1,43 @@
-@import "tailwindcss";
+/* Fonte personalizada */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
-@layer base {
-  :root {
-    --background: #ffffff;
-    --foreground: #171717;
-  }
+/* Tailwind CSS */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --background: #0a0a0a;
-      --foreground: #ededed;
-    }
-  }
+/* Reset e ajustes globais */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-  body {
-    background: var(--background);
-    color: var(--foreground);
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f9fafb; /* tom claro e moderno */
+  color: #1f2937; /* gray-800 do Tailwind */
+  line-height: 1.6;
+  scroll-behavior: smooth;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Animação fade-in */
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
   }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 1s ease-out both;
 }

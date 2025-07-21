@@ -1,0 +1,19 @@
+export default function SuportePage() {
+  return (
+    <div className="min-h-screen px-6 py-20 max-w-3xl mx-auto">
+      <h1 className="text-4xl font-bold text-blue-700 mb-6">Suporte Técnico</h1>
+      <p className="text-gray-700 mb-4">
+        Está com dificuldades para instalar ou utilizar seu certificado digital? Nosso suporte está aqui para ajudar.
+      </p>
+      <ul className="list-disc list-inside text-gray-700 space-y-2">
+        <li>Instalação de certificado A1 ou A3</li>
+        <li>Importação e backup do certificado</li>
+        <li>Erro de assinatura digital</li>
+        <li>Orientações para uso no e-CAC, Conectividade Social, etc.</li>
+      </ul>
+      <p className="mt-6 text-gray-700">
+        <strong>Fale com nosso suporte:</strong> <a href="https://wa.me/553235328411" className="text-blue-600 underline">Clique aqui para WhatsApp</a>
+      </p>
+    </div>
+  )
+}
