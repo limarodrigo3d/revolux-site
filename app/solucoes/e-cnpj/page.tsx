@@ -2,55 +2,59 @@
 
 import { useCart } from "@/context/CartContext";
 
-export default function ECNPJPage() {
+export default function EcnpjPage() {
   const { addToCart } = useCart();
 
-  const produtos = [
+  const opcoes = [
     {
-      id: "ecnpj-a1",
-      name: "e-CNPJ A1 - Arquivo - 12 Meses",
-      price: 165.0,
+      nome: "e-CNPJ A1 (Arquivo)",
+      preco: 199.9,
     },
     {
-      id: "ecnpj-smartcard",
-      name: "e-CNPJ A3 - SmartCard - 36 Meses",
-      price: 265.0,
+      nome: "e-CNPJ A3 (Cartão + Leitora)",
+      preco: 289.9,
     },
     {
-      id: "ecnpj-token",
-      name: "e-CNPJ A3 - Token - 36 Meses",
-      price: 350.0,
-    },
-    {
-      id: "ecnpj-sem-midia",
-      name: "e-CNPJ A3 - Sem Mídia - 36 Meses",
-      price: 240.0,
-    },
-    {
-      id: "ecnpj-smartcard-leitora",
-      name: "e-CNPJ A3 - SmartCard + Leitora - 36 Meses",
-      price: 365.0,
+      nome: "e-CNPJ A3 (Token USB)",
+      preco: 319.9,
     },
   ];
 
   return (
-    <div className="max-w-5xl mx-auto px-6 py-16">
-      <h1 className="text-3xl font-bold text-gray-800 mb-8">e-CNPJ</h1>
+    <main className="min-h-screen bg-white px-6 pt-28 pb-16 text-gray-800 animate-fade-in">
+      <div className="max-w-4xl mx-auto text-center">
+        <h1 className="text-3xl md:text-4xl font-bold mb-4 text-blue-700">
+          Certificado Digital e-CNPJ
+        </h1>
+        <p className="text-gray-600 mb-10">
+          O e-CNPJ é o CNPJ eletrônico da sua empresa. Com ele, você pode assinar NF-e, acessar o e-CAC e realizar transações com validade jurídica.
+        </p>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {produtos.map((produto) => (
-          <div key={produto.id} className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
-            <h2 className="text-lg font-semibold text-gray-900 mb-2">{produto.name}</h2>
-            <p className="text-gray-700 text-sm mb-4">R$ {produto.price.toFixed(2)}</p>
-            <button
-              onClick={() => addToCart({ ...produto, quantity: 1 })}
-              className="bg-[#0057D8] text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+        <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 text-left">
+          {opcoes.map((opcao, index) => (
+            <div
+              key={index}
+              className="bg-gray-50 border rounded-xl p-6 shadow-sm hover:shadow-md transition"
             >
-              Comprar
-            </button>
-          </div>
-        ))}
+              <h2 className="text-lg font-semibold mb-1">{opcao.nome}</h2>
+              <p className="text-sm text-gray-600 mb-4">
+                R$ {opcao.preco.toFixed(2).replace(".", ",")}
+              </p>
+              <button
+                onClick={() =>
+                  addToCart({
+                    nome: opcao.nome,
+                    preco: opcao.preco,
+                  })
+                }
+                className="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded text-sm"
+              >
+                Comprar
+              </button>
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
+    </main>
   );
 }

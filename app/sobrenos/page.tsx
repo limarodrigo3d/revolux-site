@@ -13,7 +13,7 @@ export default function SobreNos() {
         className="max-w-5xl mx-auto"
       >
         <h1 className="text-4xl font-bold text-center text-[#1A1A2E] mb-6">Sobre Nós</h1>
-        
+
         <p className="text-lg text-gray-700 mb-6 leading-relaxed text-justify">
           A <strong>Revolux Certificadora Digital</strong> nasceu em 2024 da união de três irmãos com o sonho de transformar a emissão de certificados digitais em algo mais humano, acessível e confiável. Mesmo sendo uma empresa jovem, carregamos uma bagagem de mais de <strong>9 anos de experiência</strong> no mercado, o que nos permite oferecer um atendimento altamente qualificado e diferenciado.
         </p>
