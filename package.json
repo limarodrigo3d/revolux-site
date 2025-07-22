@@ -1,6 +1,7 @@
 {
   "name": "revolux-site",
   "version": "1.0.0",
+  "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -8,22 +9,21 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@hookform/resolvers": "^5.1.1",
-    "framer-motion": "^12.23.6",
-    "lucide-react": "^0.525.0",
-    "next": "14.1.0",
+    "lucide-react": "^0.293.0",
+    "mercadopago": "^2.8.0",
+    "next": "15.0.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-hook-form": "^7.60.0",
-    "react-icons": "^5.5.0",
-    "zod": "^4.0.5"
+    "react-icons": "^4.12.0"
   },
   "devDependencies": {
-    "@types/node": "24.0.15",
+    "@types/node": "24.1.0",
     "@types/react": "19.1.8",
-    "autoprefixer": "^10.4.14",
+    "autoprefixer": "^10.4.15",
+    "eslint": "8.56.0",
+    "eslint-config-next": "15.0.0",
     "postcss": "^8.4.24",
-    "tailwindcss": "^3.3.3",
+    "tailwindcss": "^3.4.1",
     "typescript": "^5.3.3"
   }
 }
