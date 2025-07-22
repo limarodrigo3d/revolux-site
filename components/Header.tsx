@@ -38,6 +38,7 @@ export default function Header() {
         {/* Menu Desktop */}
         <nav className="hidden md:flex gap-6 text-sm items-center">
           <Link href="/" className="hover:text-[#0057D8] transition">Início</Link>
+          <Link href="/sobrenos" className="hover:text-[#0057D8] transition">Sobre Nós</Link>
           <Link href="/certificados" className="hover:text-[#0057D8] transition">Certificados</Link>
 
           <div
@@ -65,6 +66,7 @@ export default function Header() {
       {menuOpen && (
         <div className="md:hidden mt-4 space-y-3 text-sm bg-white text-gray-800 p-4 rounded shadow-md z-50">
           <Link href="/" className="block hover:text-[#0057D8]" onClick={() => setMenuOpen(false)}>Início</Link>
+          <Link href="/sobrenos" className="block hover:text-[#0057D8]" onClick={() => setMenuOpen(false)}>Sobre Nós</Link>
           <Link href="/certificados" className="block hover:text-[#0057D8]" onClick={() => setMenuOpen(false)}>Certificados</Link>
           <details className="group">
             <summary className="cursor-pointer hover:text-[#0057D8]">Soluções</summary>
