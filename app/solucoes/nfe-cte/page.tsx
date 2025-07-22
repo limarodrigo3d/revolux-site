@@ -1,43 +1,54 @@
+// app/solucoes/nfe-cte/page.tsx
 "use client";
 
-export default function BirdIdPfPage() {
+import { useCart } from "@/context/CartContext";
+
+export default function NFePage() {
+  const { addToCart } = useCart();
+
+  const produtos = [
+    {
+      id: "nfe-arquivo",
+      nome: "NF-e A1 (Arquivo)",
+      preco: 159.90,
+    },
+    {
+      id: "nfe-cartao",
+      nome: "NF-e A3 (Cartão + Leitora)",
+      preco: 279.90,
+    },
+    {
+      id: "nfe-token",
+      nome: "NF-e A3 (Token)",
+      preco: 319.90,
+    },
+  ];
+
   return (
-    <main className="min-h-screen bg-white text-gray-800 px-6 md:px-20 py-16">
-      <h1 className="text-3xl md:text-4xl font-bold mb-4 text-[#0057D8]">
-        Escolha as opções disponíveis para Bird ID PF
-      </h1>
-      <p className="mb-10 text-lg text-gray-600">
-        O Bird ID Pessoa Física é ideal para autenticação e assinatura digital com biometria facial.
-      </p>
+    <div className="min-h-screen bg-white text-gray-900 py-12 px-6">
+      <h1 className="text-3xl font-bold mb-6">Certificado NF-e / CT-e</h1>
 
-      <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-        {/* Opção 1 */}
-        <div className="border rounded-xl p-6 shadow hover:shadow-lg transition">
-          <h2 className="text-xl font-semibold mb-2">Bird ID PF - 12 Meses</h2>
-          <p className="text-gray-600 mb-4">R$ 110,00</p>
-          <button className="bg-[#0057D8] text-white px-4 py-2 rounded hover:bg-blue-700 transition w-full">
-            Comprar
-          </button>
-        </div>
-
-        {/* Opção 2 */}
-        <div className="border rounded-xl p-6 shadow hover:shadow-lg transition">
-          <h2 className="text-xl font-semibold mb-2">Bird ID PF - 24 Meses</h2>
-          <p className="text-gray-600 mb-4">R$ 185,00</p>
-          <button className="bg-[#0057D8] text-white px-4 py-2 rounded hover:bg-blue-700 transition w-full">
-            Comprar
-          </button>
-        </div>
-
-        {/* Opção 3 */}
-        <div className="border rounded-xl p-6 shadow hover:shadow-lg transition">
-          <h2 className="text-xl font-semibold mb-2">Bird ID PF - 36 Meses</h2>
-          <p className="text-gray-600 mb-4">R$ 240,00</p>
-          <button className="bg-[#0057D8] text-white px-4 py-2 rounded hover:bg-blue-700 transition w-full">
-            Comprar
-          </button>
-        </div>
+      <div className="grid md:grid-cols-3 gap-6">
+        {produtos.map((produto) => (
+          <div
+            key={produto.id}
+            className="border rounded-xl shadow p-6 flex flex-col justify-between"
+          >
+            <div>
+              <h2 className="text-xl font-semibold">{produto.nome}</h2>
+              <p className="text-lg mt-2 text-blue-600 font-bold">
+                R$ {produto.preco.toFixed(2).replace(".", ",")}
+              </p>
+            </div>
+            <button
+              onClick={() => addToCart(produto)}
+              className="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+            >
+              Comprar
+            </button>
+          </div>
+        ))}
       </div>
-    </main>
+    </div>
   );
 }
