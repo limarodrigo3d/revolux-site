@@ -1,16 +1,15 @@
-// components/ViewCartButton.tsx
-"use client";
+'use client';
 
-import Link from "next/link";
-import { ShoppingCart } from "lucide-react";
-import { useCart } from "@/context/CartContext";
+import Link from 'next/link';
+import { ShoppingCart } from 'lucide-react';
+import { useCart } from '@/context/CartContext';
 
 export default function ViewCartButton() {
   const { cartItems } = useCart();
 
   if (!cartItems || cartItems.length === 0) return null;
 
-  const totalItems = cartItems.reduce((acc, item) => acc + item.quantity, 0);
+  const totalItems = cartItems.reduce((acc, item) => acc + item.quantidade, 0); // ✅ fix
 
   return (
     <div className="fixed bottom-24 right-6 z-50">

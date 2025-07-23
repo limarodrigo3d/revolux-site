@@ -1,22 +1,24 @@
-// app/checkout/page.tsx
-"use client";
+'use client';
 
-import { useCart } from "@/context/CartContext";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useCart } from '@/context/CartContext';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 export default function CheckoutPage() {
   const { cartItems, clearCart } = useCart();
   const router = useRouter();
-  const [nome, setNome] = useState("");
-  const [email, setEmail] = useState("");
+  const [nome, setNome] = useState('');
+  const [email, setEmail] = useState('');
 
-  const total = cartItems.reduce((acc, item) => acc + item.preco * item.quantity, 0).toFixed(2);
+  const total = cartItems.reduce(
+    (acc, item) => acc + item.preco * item.quantidade,
+    0
+  ).toFixed(2);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     clearCart();
-    router.push("/obrigado");
+    router.push('/obrigado');
   };
 
   return (
@@ -55,16 +57,21 @@ export default function CheckoutPage() {
               {cartItems.map((item) => (
                 <li key={item.id} className="flex justify-between">
                   <span>
-                    {item.nome} x{item.quantity}
+                    {item.nome} x{item.quantidade}
                   </span>
-                  <span>R$ {(item.preco * item.quantity).toFixed(2)}</span>
+                  <span>
+                    R$ {(item.preco * item.quantidade).toFixed(2).replace('.', ',')}
+                  </span>
                 </li>
               ))}
             </ul>
-            <p className="text-lg font-bold">Total: R$ {total}</p>
+            <p className="text-lg font-bold">Total: R$ {total.replace('.', ',')}</p>
           </div>
 
-          <button type="submit" className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded">
+          <button
+            type="submit"
+            className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded"
+          >
             Finalizar Compra
           </button>
         </form>

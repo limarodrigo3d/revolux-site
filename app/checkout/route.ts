@@ -1,8 +1,9 @@
+// app/api/mercadopago/route.ts
 import { NextResponse } from 'next/server';
 import mercadopago from 'mercadopago';
 
 mercadopago.configure({
-  access_token: process.env.MP_ACCESS_TOKEN!,
+  access_token: process.env.MP_ACCESS_TOKEN!, // Adicione sua chave no .env
 });
 
 export async function POST(req: Request) {
@@ -19,9 +20,9 @@ export async function POST(req: Request) {
         },
       ],
       back_urls: {
-        success: 'https://seusite.com.br/obrigado',
-        failure: 'https://seusite.com.br/erro',
-        pending: 'https://seusite.com.br/pendente',
+        success: 'https://revoluxcertificados.com.br/obrigado',
+        failure: 'https://revoluxcertificados.com.br/erro',
+        pending: 'https://revoluxcertificados.com.br/pendente',
       },
       auto_return: 'approved',
     });

@@ -1,12 +1,11 @@
 'use client';
 
-import { useContext } from 'react';
-import { CartContext } from '@/context/CartContext';
+import { useCart } from '@/context/CartContext';
 import { FaShoppingCart } from 'react-icons/fa';
 import Link from 'next/link';
 
 export default function FloatingCartButton() {
-  const { cartItems } = useContext(CartContext);
+  const { cartItems } = useCart(); // ✅ corrigido
   const totalQuantidade = cartItems.reduce((total, item) => total + item.quantidade, 0);
 
   if (totalQuantidade === 0) return null;
