@@ -1,4 +1,11 @@
-import { HeroSection, VantagensSection, CertificadosSection } from '@/components';
+'use client';
+
+import {
+  HeroSection,
+  VantagensSection,
+  CertificadosSection,
+  CustomButton,
+} from '@/components';
 
 export default function Home() {
   return (
@@ -6,6 +13,13 @@ export default function Home() {
       <HeroSection />
       <VantagensSection />
       <CertificadosSection />
+
+      {/* Exemplo de uso do botão personalizado */}
+      <div className="text-center">
+        <CustomButton href="/contato">
+          Fale com a Revolux
+        </CustomButton>
+      </div>
     </div>
   );
 }
