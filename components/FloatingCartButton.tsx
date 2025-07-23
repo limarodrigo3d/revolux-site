@@ -1,23 +1,31 @@
 'use client';
 
-import { useCart } from '@/context/CartContext';
-import { FaShoppingCart } from 'react-icons/fa';
 import Link from 'next/link';
+import { ShoppingCart } from 'lucide-react';
+import { useCart } from '@/context/CartContext';
 
 export default function FloatingCartButton() {
-  const { cartItems } = useCart(); // ✅ corrigido
-  const totalQuantidade = cartItems.reduce((total, item) => total + item.quantidade, 0);
+  const { cartItems } = useCart();
+
+  const totalQuantidade = cartItems.reduce(
+    (total, item) => total + (item.quantidade ?? 1),
+    0
+  );
 
   if (totalQuantidade === 0) return null;
 
   return (
-    <Link
-      href="/checkout"
-      className="fixed bottom-20 right-6 z-50 bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-full shadow-lg flex items-center gap-2 transition"
-      aria-label="Ir para o carrinho de compras"
-    >
-      <FaShoppingCart size={18} />
-      <span>{totalQuantidade}</span>
-    </Link>
+    <div className="fixed bottom-24 right-6 z-50 animate-fade-in">
+      <Link href="/checkout">
+        <button
+          className="flex items-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-black font-semibold px-5 py-3 rounded-full shadow-lg transition duration-300"
+          aria-label={`Ver carrinho com ${totalQuantidade} item(ns)`}
+          title={`Ver carrinho (${totalQuantidade})`}
+        >
+          <ShoppingCart size={20} />
+          Ver Carrinho ({totalQuantidade})
+        </button>
+      </Link>
+    </div>
   );
 }
