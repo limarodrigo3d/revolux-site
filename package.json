@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@fontsource/inter": "^5.2.6",
     "@fontsource/poppins": "^5.2.6",
     "framer-motion": "^12.23.7",
     "keen-slider": "^6.8.6",

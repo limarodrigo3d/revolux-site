@@ -1,4 +1,4 @@
-import type { Config } from 'tailwindcss'
+import type { Config } from 'tailwindcss';
 
 const config: Config = {
   content: [
@@ -9,6 +9,7 @@ const config: Config = {
     extend: {
       fontFamily: {
         sans: ['Poppins', 'sans-serif'],
+        inter: ['Inter', 'sans-serif'],
       },
       animation: {
         'fade-in': 'fade-in 1s ease-out both',
@@ -22,5 +23,6 @@ const config: Config = {
     },
   },
   plugins: [],
-}
-export default config
+};
+
+export default config;
