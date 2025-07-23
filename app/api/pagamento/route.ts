@@ -16,7 +16,7 @@ export async function POST(req: Request) {
   }));
 
   try {
-    const preference = await mercadopago.preference.create({
+    const preference = await mercadopago.preferences.create({
       body: {
         items,
         back_urls: {
