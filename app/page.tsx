@@ -1,6 +1,6 @@
-import HeroSection from '@/components/ui/HeroSection'; 
-import VantagensSection from '@/components/ui/VantagensSection';
-import CertificadosSection from '@/components/ui/CertificadosSection';
+// app/page.tsx
+
+import { HeroSection, VantagensSection, CertificadosSection } from '@/components';
 
 export default function Home() {
   return (
