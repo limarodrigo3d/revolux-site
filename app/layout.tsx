@@ -1,20 +1,22 @@
-import './globals.css'; // <- ESSENCIAL para carregar Tailwind
+import './globals.css';
+import type { Metadata } from 'next';
 import { CartProvider } from '@/context/CartContext';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import WhatsappButton from '@/components/WhatsappButton';
 
-export const metadata = {
+export const metadata: Metadata = {
   title: 'Revolux Certificados Digitais',
-  description: 'Emissão de certificados digitais com segurança, agilidade e confiança.',
+  description: 'A confiança que você busca, a segurança que você precisa.',
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="pt-BR">
-      <head>
-        <link rel="icon" href="/favicon.ico" />
-      </head>
       <body>
         <CartProvider>
           <Header />

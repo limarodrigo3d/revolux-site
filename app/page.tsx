@@ -1,15 +1,13 @@
-import {
-  HeroSection,
-  VantagensSection,
-  CertificadosSection,
-} from '@/components';
+import HeroSection from '@/components/ui/HeroSection';
+import VantagensSection from '@/components/ui/VantagensSection';
+import CertificadosSection from '@/components/ui/CertificadosSection';
 
 export default function Home() {
   return (
-    <main className="bg-[#F2F5F9]">
+    <div className="space-y-16">
       <HeroSection />
       <VantagensSection />
       <CertificadosSection />
-    </main>
+    </div>
   );
 }
