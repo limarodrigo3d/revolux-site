@@ -1,5 +1,3 @@
-// app/page.tsx
-
 import { HeroSection, VantagensSection, CertificadosSection } from '@/components';
 
 export default function Home() {
