@@ -1,21 +1,27 @@
-"use client";
+'use client';
 
-import { useCart } from "@/context/CartContext";
+import { useCart } from '@/context/CartContext';
 
-const produtos = [
+type Produto = {
+  id: string;
+  nome: string;
+  preco: number;
+};
+
+const produtos: Produto[] = [
   {
-    id: "ecpf-a1",
-    nome: "e-CPF A1 (Arquivo)",
+    id: 'ecpf-a1',
+    nome: 'e-CPF A1 (Arquivo)',
     preco: 149.9,
   },
   {
-    id: "ecpf-cartao",
-    nome: "e-CPF A3 (Cartão + Leitora)",
+    id: 'ecpf-cartao',
+    nome: 'e-CPF A3 (Cartão + Leitora)',
     preco: 239.9,
   },
   {
-    id: "ecpf-token",
-    nome: "e-CPF A3 (Token)",
+    id: 'ecpf-token',
+    nome: 'e-CPF A3 (Token)',
     preco: 299.9,
   },
 ];
@@ -26,7 +32,7 @@ export default function CertificadosSection() {
   return (
     <section className="py-20 bg-[#F9FAFB] text-gray-800">
       <div className="max-w-6xl mx-auto px-4">
-        <h2 className="text-3xl font-bold text-center mb-12">
+        <h2 className="text-3xl font-bold text-center mb-12 text-blue-700">
           Nossos Certificados
         </h2>
 
@@ -34,15 +40,15 @@ export default function CertificadosSection() {
           {produtos.map((produto) => (
             <div
               key={produto.id}
-              className="bg-white rounded-xl shadow-md p-6 flex flex-col items-center text-center transition hover:shadow-lg"
+              className="bg-white rounded-xl shadow p-6 flex flex-col items-center text-center hover:shadow-lg transition"
             >
               <h3 className="text-xl font-semibold mb-2">{produto.nome}</h3>
               <p className="text-2xl font-bold text-[#D4AF37] mb-4">
-                R$ {produto.preco.toFixed(2)}
+                R$ {produto.preco.toFixed(2).replace('.', ',')}
               </p>
               <button
-                onClick={() => addToCart(produto)}
-                className="bg-[#D4AF37] hover:bg-[#c49e2c] text-[#0A0A23] px-5 py-2 rounded-lg font-medium transition"
+                onClick={() => addToCart({ ...produto, quantidade: 1 })}
+                className="bg-[#D4AF37] hover:bg-[#c49e2c] text-[#0A0A23] px-6 py-2 rounded-lg font-medium transition"
               >
                 Comprar
               </button>

@@ -1,39 +1,42 @@
 'use client';
 
-import { FaShieldAlt, FaClock, FaLaptopCode } from 'react-icons/fa';
+import { FaShieldAlt, FaClock, FaUserCheck } from 'react-icons/fa';
 
 export default function VantagensSection() {
   const vantagens = [
     {
-      titulo: 'Segurança Jurídica',
-      descricao: 'Certificados com validade jurídica garantida, protegendo seus dados e transações.',
+      titulo: 'Segurança Garantida',
+      descricao: 'Certificados com criptografia avançada e validação jurídica.',
       icone: <FaShieldAlt className="text-3xl text-blue-600" />,
     },
     {
-      titulo: 'Atendimento Rápido',
-      descricao: 'Emita seu certificado com agilidade e suporte especializado.',
+      titulo: 'Agilidade no Processo',
+      descricao: 'Emissão e renovação em poucos minutos, totalmente online.',
       icone: <FaClock className="text-3xl text-blue-600" />,
     },
     {
-      titulo: '100% Online',
-      descricao: 'Processo totalmente digital, seguro e sem complicações.',
-      icone: <FaLaptopCode className="text-3xl text-blue-600" />,
+      titulo: 'Atendimento Personalizado',
+      descricao: 'Suporte dedicado e consultoria para cada cliente.',
+      icone: <FaUserCheck className="text-3xl text-blue-600" />,
     },
   ];
 
   return (
     <section className="py-20 bg-white text-gray-800">
-      <div className="max-w-6xl mx-auto px-6 text-center">
-        <h2 className="text-3xl font-bold mb-12">Por que escolher a Revolux?</h2>
-        <div className="grid md:grid-cols-3 gap-10">
-          {vantagens.map((item, index) => (
+      <div className="max-w-6xl mx-auto px-6">
+        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-blue-700">
+          Por que escolher a Revolux?
+        </h2>
+
+        <div className="grid md:grid-cols-3 gap-8">
+          {vantagens.map((vantagem, index) => (
             <div
               key={index}
-              className="bg-gray-50 rounded-xl shadow hover:shadow-md p-6 transition"
+              className="p-6 bg-[#F2F5F9] rounded-xl shadow hover:shadow-md transition"
             >
-              <div className="mb-4">{item.icone}</div>
-              <h3 className="text-xl font-semibold mb-2">{item.titulo}</h3>
-              <p className="text-sm text-gray-600">{item.descricao}</p>
+              <div className="mb-4">{vantagem.icone}</div>
+              <h3 className="text-xl font-semibold mb-2">{vantagem.titulo}</h3>
+              <p>{vantagem.descricao}</p>
             </div>
           ))}
         </div>
