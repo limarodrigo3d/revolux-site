@@ -1,4 +1,3 @@
-// components/HeroSection.tsx
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -15,20 +14,25 @@ export default function HeroSection() {
   const [index, setIndex] = useState(0);
   const [loaded, setLoaded] = useState(false);
 
-  // Carregar imagem atual
+  // Preload da imagem
   useEffect(() => {
     const img = new Image();
     img.src = images[index];
     img.onload = () => setLoaded(true);
+    img.onerror = () => {
+      console.error(`Erro ao carregar imagem: ${images[index]}`);
+      setLoaded(true); // evita travar caso a imagem falhe
+    };
   }, [index]);
 
-  // Troca automática das imagens
+  // Troca automática de imagem
   useEffect(() => {
     const timer = setInterval(() => {
+      setLoaded(false); // resetar para nova imagem
       setIndex((prev) => (prev + 1) % images.length);
     }, 4000);
     return () => clearInterval(timer);
-  }, []); // ⚠️ importante: array vazio evita recriar o timer a cada troca de imagem
+  }, []);
 
   return (
     <section className="relative h-[90vh] overflow-hidden">
