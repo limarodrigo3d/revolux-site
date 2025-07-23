@@ -14,7 +14,6 @@ export default function Home() {
       <VantagensSection />
       <CertificadosSection />
 
-      {/* Exemplo de uso do botão personalizado */}
       <div className="text-center">
         <CustomButton href="/contato">
           Fale com a Revolux
