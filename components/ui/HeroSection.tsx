@@ -14,21 +14,19 @@ export default function HeroSection() {
   const [index, setIndex] = useState(0);
   const [loaded, setLoaded] = useState(false);
 
-  // Preload da imagem
   useEffect(() => {
     const img = new Image();
     img.src = images[index];
     img.onload = () => setLoaded(true);
     img.onerror = () => {
       console.error(`Erro ao carregar imagem: ${images[index]}`);
-      setLoaded(true); // evita travar caso a imagem falhe
+      setLoaded(true);
     };
   }, [index]);
 
-  // Troca automática de imagem
   useEffect(() => {
     const timer = setInterval(() => {
-      setLoaded(false); // resetar para nova imagem
+      setLoaded(false);
       setIndex((prev) => (prev + 1) % images.length);
     }, 4000);
     return () => clearInterval(timer);
@@ -39,12 +37,12 @@ export default function HeroSection() {
       <AnimatePresence mode="wait">
         {loaded && (
           <motion.div
-            key={images[index]}
+            key={`bg-${index}`} // <- ESSENCIAL
             className="absolute inset-0 bg-cover bg-center"
             style={{ backgroundImage: `url(${images[index]})` }}
             initial={{ opacity: 0, scale: 1.1 }}
             animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
+            exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: 1 }}
           >
             <div className="w-full h-full bg-black/40" />
