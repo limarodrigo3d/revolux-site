@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { MercadoPagoConfig } from 'mercadopago';
+import { MercadoPagoConfig, Preference } from 'mercadopago';
 
 const mercadopago = new MercadoPagoConfig({
   accessToken: process.env.ACCESS_TOKEN!,
@@ -15,8 +15,10 @@ export async function POST(req: Request) {
     currency_id: 'BRL',
   }));
 
+  const preference = new Preference(mercadopago);
+
   try {
-    const preference = await mercadopago.preferences.create({
+    const result = await preference.create({
       body: {
         items,
         back_urls: {
@@ -28,7 +30,7 @@ export async function POST(req: Request) {
       },
     });
 
-    return NextResponse.json({ init_point: preference.init_point });
+    return NextResponse.json({ init_point: result.init_point });
   } catch (error) {
     console.error('Erro ao criar preferência:', error);
     return NextResponse.json({ error: 'Erro ao criar link de pagamento' }, { status: 500 });
