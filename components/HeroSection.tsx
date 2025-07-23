@@ -1,4 +1,3 @@
-// components/ui/HeroSection.tsx
 'use client';
 
 import { useEffect, useState } from 'react';
