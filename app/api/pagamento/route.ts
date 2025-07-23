@@ -1,35 +1,36 @@
 import { NextResponse } from 'next/server';
-import mercadopago from 'mercadopago';
+import { MercadoPagoConfig } from 'mercadopago';
 
-mercadopago.configure({
-  access_token: process.env.ACCESS_TOKEN!,
+const mercadopago = new MercadoPagoConfig({
+  accessToken: process.env.MP_ACCESS_TOKEN!,
 });
 
 export async function POST(req: Request) {
-  const body = await req.json();
-
-  const items = body.cart.map((item: any) => ({
-    title: item.nome,
-    quantity: item.quantidade || 1,
-    unit_price: item.preco,
-    currency_id: 'BRL',
-  }));
-
-  const preference = {
-    items,
-    back_urls: {
-      success: `${process.env.NEXT_PUBLIC_URL}/obrigado`,
-      failure: `${process.env.NEXT_PUBLIC_URL}/checkout`,
-      pending: `${process.env.NEXT_PUBLIC_URL}/checkout`,
-    },
-    auto_return: 'approved',
-  };
-
   try {
-    const response = await mercadopago.preferences.create(preference);
-    return NextResponse.json({ init_point: response.body.init_point });
+    const body = await req.json();
+
+    const preference = await mercadopago.preferences.create({
+      body: {
+        items: [
+          {
+            title: body.title,
+            quantity: 1,
+            currency_id: 'BRL',
+            unit_price: body.price,
+          },
+        ],
+        back_urls: {
+          success: 'https://seusite.com.br/obrigado',
+          failure: 'https://seusite.com.br/erro',
+          pending: 'https://seusite.com.br/pendente',
+        },
+        auto_return: 'approved',
+      },
+    });
+
+    return NextResponse.json({ init_point: preference.init_point });
   } catch (error) {
     console.error('Erro ao criar preferência:', error);
-    return NextResponse.json({ error: 'Erro ao criar link de pagamento' }, { status: 500 });
+    return NextResponse.json({ error: 'Erro ao criar preferência' }, { status: 500 });
   }
 }
