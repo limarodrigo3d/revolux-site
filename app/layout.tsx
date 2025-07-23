@@ -1,3 +1,4 @@
+// app/layout.tsx
 import './globals.css';
 import type { Metadata } from 'next';
 import { CartProvider } from '@/context/CartContext';
@@ -17,7 +18,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-BR">
-      <head />
       <body>
         <CartProvider>
           <Header />
