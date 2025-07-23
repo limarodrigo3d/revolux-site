@@ -9,13 +9,14 @@ export default function ViewCartButton() {
 
   if (!cartItems || cartItems.length === 0) return null;
 
-  const totalItems = cartItems.reduce((acc, item) => acc + item.quantidade, 0);
+  const totalItems = cartItems.reduce((acc, item) => acc + (item.quantidade ?? 1), 0);
 
   return (
     <div className="fixed bottom-24 right-6 z-50 animate-fade-in">
-      <Link href="/checkout" aria-label={`Ver carrinho com ${totalItems} item(ns)`}>
+      <Link href="/checkout">
         <button
           className="flex items-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-black font-semibold px-5 py-3 rounded-full shadow-lg transition duration-300"
+          aria-label={`Ver carrinho com ${totalItems} item(ns)`}
           title={`Ver carrinho (${totalItems})`}
         >
           <ShoppingCart size={20} />
