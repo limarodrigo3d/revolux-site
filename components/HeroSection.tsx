@@ -49,8 +49,10 @@ export default function HeroSection() {
         </h1>
 
         <p className="mt-6 text-base md:text-lg max-w-xl">
-          Na <strong className="text-white font-semibold">Revolux</strong>, você emite seu certificado com agilidade,
-          suporte premium e validação jurídica total — 100% online e personalizado.
+          Na{" "}
+          <strong className="text-white font-semibold">Revolux</strong>, você
+          emite seu certificado com agilidade, suporte premium e validação
+          jurídica total — 100% online e personalizado.
         </p>
 
         <Link href="/certificados">
