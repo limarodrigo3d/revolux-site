@@ -1,108 +1,96 @@
 'use client';
 
-import { useCart } from '@/context/CartContext';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useCart } from '@/context/CartContext';
 
 export default function CheckoutPage() {
-  const { cart, clearCart } = useCart();
+  const { cartItems, clearCart } = useCart();
   const router = useRouter();
+
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
 
-  const total = cart
-    .reduce((acc, item) => acc + item.preco * (item.quantidade || 1), 0)
-    .toFixed(2);
+  const total = cartItems.reduce(
+    (acc, item) => acc + item.preco * (item.quantidade || 1),
+    0
+  );
 
-  const handleMercadoPago = async () => {
-    setLoading(true);
-    setError('');
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
 
-    try {
-      const response = await fetch('/api/pagamento', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ cart }),
-      });
+    // Aqui você pode enviar os dados para uma API ou serviço de pagamento
+    console.log('Nome:', nome);
+    console.log('Email:', email);
+    console.log('Itens do carrinho:', cartItems);
 
-      const data = await response.json();
-
-      if (data.init_point) {
-        window.location.href = data.init_point;
-      } else {
-        setError('Erro ao redirecionar para o pagamento.');
-      }
-    } catch (err) {
-      console.error('Erro ao processar pagamento:', err);
-      setError('Erro ao processar pagamento.');
-    } finally {
-      setLoading(false);
-    }
+    clearCart(); // limpa o carrinho
+    router.push('/obrigado'); // redireciona
   };
 
-  return (
-    <main className="min-h-screen px-6 pt-28 pb-16 bg-white text-gray-800">
-      <h1 className="text-3xl font-bold mb-6">Finalizar Pedido</h1>
+  if (cartItems.length === 0) {
+    return (
+      <main className="min-h-screen flex items-center justify-center text-gray-700">
+        <p className="text-xl">Seu carrinho está vazio.</p>
+      </main>
+    );
+  }
 
-      {cart.length === 0 ? (
-        <p>Seu carrinho está vazio.</p>
-      ) : (
-        <form className="space-y-6 max-w-xl" onSubmit={(e) => e.preventDefault()}>
+  return (
+    <main className="min-h-screen px-6 pt-28 pb-16 bg-white text-gray-800 animate-fade-in">
+      <div className="max-w-3xl mx-auto">
+        <h1 className="text-3xl font-bold mb-6 text-center">Finalizar Compra</h1>
+
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label className="block mb-1 font-medium">Nome completo</label>
+            <label className="block text-sm font-medium mb-1">Nome</label>
             <input
               type="text"
               value={nome}
               onChange={(e) => setNome(e.target.value)}
+              className="w-full border border-gray-300 rounded px-4 py-2"
               required
-              className="w-full border rounded px-4 py-2"
             />
           </div>
 
           <div>
-            <label className="block mb-1 font-medium">E-mail</label>
+            <label className="block text-sm font-medium mb-1">E-mail</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              className="w-full border border-gray-300 rounded px-4 py-2"
               required
-              className="w-full border rounded px-4 py-2"
             />
           </div>
 
-          <div className="border-t pt-4">
-            <h2 className="text-xl font-semibold mb-2">Resumo do Pedido:</h2>
-            <ul className="mb-2 space-y-1">
-              {cart.map((item) => (
+          <div>
+            <h2 className="text-lg font-semibold mb-2">Resumo do Pedido</h2>
+            <ul className="space-y-2">
+              {cartItems.map((item) => (
                 <li key={item.id} className="flex justify-between">
                   <span>
-                    {item.nome} x{item.quantidade || 1}
+                    {item.nome} x {item.quantidade}
                   </span>
                   <span>
-                    R$ {(item.preco * (item.quantidade || 1)).toFixed(2).replace('.', ',')}
+                    R$ {(item.preco * (item.quantidade || 1)).toFixed(2)}
                   </span>
                 </li>
               ))}
             </ul>
-            <p className="text-lg font-bold">
-              Total: R$ {total.replace('.', ',')}
+            <p className="text-right mt-4 font-bold text-lg">
+              Total: R$ {total.toFixed(2)}
             </p>
           </div>
 
-          {error && <p className="text-red-600 font-medium">{error}</p>}
-
           <button
-            type="button"
-            onClick={handleMercadoPago}
-            disabled={loading}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded transition w-full text-lg"
+            type="submit"
+            className="w-full bg-blue-600 text-white py-3 rounded hover:bg-blue-700 transition"
           >
-            {loading ? 'Carregando...' : 'Pagar com Mercado Pago'}
+            Confirmar e Finalizar
           </button>
         </form>
-      )}
+      </div>
     </main>
   );
 }
