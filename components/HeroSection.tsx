@@ -15,21 +15,24 @@ export default function HeroSection() {
   const [index, setIndex] = useState(0);
   const [loaded, setLoaded] = useState(false);
 
+  // Carregar imagem atual
   useEffect(() => {
     const img = new Image();
     img.src = images[index];
     img.onload = () => setLoaded(true);
+  }, [index]);
 
+  // Troca automática das imagens
+  useEffect(() => {
     const timer = setInterval(() => {
       setIndex((prev) => (prev + 1) % images.length);
     }, 4000);
-
     return () => clearInterval(timer);
-  }, [index]);
+  }, []); // ⚠️ importante: array vazio evita recriar o timer a cada troca de imagem
 
   return (
     <section className="relative h-[90vh] overflow-hidden">
-      <AnimatePresence>
+      <AnimatePresence mode="wait">
         {loaded && (
           <motion.div
             key={images[index]}
