@@ -1,4 +1,3 @@
-// app/checkout/page.tsx
 'use client';
 
 import { useCart } from '@/context/CartContext';
@@ -6,29 +5,51 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 export default function CheckoutPage() {
-  const { cartItems, clearCart } = useCart(); // <- corrigido aqui
+  const { cart, clearCart } = useCart();
   const router = useRouter();
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const total = cartItems
+  const total = cart
     .reduce((acc, item) => acc + item.preco * (item.quantidade || 1), 0)
     .toFixed(2);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    clearCart();
-    router.push('/obrigado');
+  const handleMercadoPago = async () => {
+    setLoading(true);
+    setError('');
+
+    try {
+      const response = await fetch('/api/pagamento', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ cart }),
+      });
+
+      const data = await response.json();
+
+      if (data.init_point) {
+        window.location.href = data.init_point;
+      } else {
+        setError('Erro ao redirecionar para o pagamento.');
+      }
+    } catch (err) {
+      console.error('Erro ao processar pagamento:', err);
+      setError('Erro ao processar pagamento.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <main className="min-h-screen px-6 pt-28 pb-16 bg-white text-gray-800">
       <h1 className="text-3xl font-bold mb-6">Finalizar Pedido</h1>
 
-      {cartItems.length === 0 ? (
+      {cart.length === 0 ? (
         <p>Seu carrinho está vazio.</p>
       ) : (
-        <form onSubmit={handleSubmit} className="space-y-6 max-w-xl">
+        <form className="space-y-6 max-w-xl" onSubmit={(e) => e.preventDefault()}>
           <div>
             <label className="block mb-1 font-medium">Nome completo</label>
             <input
@@ -54,7 +75,7 @@ export default function CheckoutPage() {
           <div className="border-t pt-4">
             <h2 className="text-xl font-semibold mb-2">Resumo do Pedido:</h2>
             <ul className="mb-2 space-y-1">
-              {cartItems.map((item) => (
+              {cart.map((item) => (
                 <li key={item.id} className="flex justify-between">
                   <span>
                     {item.nome} x{item.quantidade || 1}
@@ -70,11 +91,15 @@ export default function CheckoutPage() {
             </p>
           </div>
 
+          {error && <p className="text-red-600 font-medium">{error}</p>}
+
           <button
-            type="submit"
-            className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded transition"
+            type="button"
+            onClick={handleMercadoPago}
+            disabled={loading}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded transition w-full text-lg"
           >
-            Finalizar Compra
+            {loading ? 'Carregando...' : 'Pagar com Mercado Pago'}
           </button>
         </form>
       )}
