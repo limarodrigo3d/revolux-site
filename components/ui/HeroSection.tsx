@@ -33,19 +33,26 @@ export default function HeroSection() {
   }, []);
 
   return (
-    <section className="relative h-[90vh] overflow-hidden">
+    <section className="relative h-screen pt-24 overflow-hidden">
       <AnimatePresence mode="wait">
         {loaded && (
           <motion.div
-            key={`bg-${index}`} // <- ESSENCIAL
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: `url(${images[index]})` }}
+            key={`bg-${index}`}
+            className="absolute inset-0 w-full h-full"
             initial={{ opacity: 0, scale: 1.1 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: 1 }}
           >
-            <div className="w-full h-full bg-black/40" />
+            <div
+              className="w-full h-full bg-center bg-cover"
+              style={{
+                backgroundImage: `url(${images[index]})`,
+                backgroundPosition: 'center center',
+              }}
+            >
+              <div className="w-full h-full bg-black/50" />
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
