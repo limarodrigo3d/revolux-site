@@ -12,7 +12,7 @@ export default function CheckoutPage() {
   const [email, setEmail] = useState('');
 
   const total = cartItems.reduce(
-    (acc, item) => acc + item.preco * (item.quantidade || 1),
+    (acc, item) => acc + item.preco * (item.quantidade ?? 1),
     0
   );
 
@@ -78,16 +78,19 @@ export default function CheckoutPage() {
               Resumo do Pedido
             </h2>
             <ul className="space-y-3 divide-y divide-gray-200 mb-4">
-              {cartItems.map((item) => (
-                <li key={item.id} className="flex justify-between pt-3">
-                  <span>
-                    {item.nome} {item.quantidade > 1 && `x ${item.quantidade}`}
-                  </span>
-                  <span>
-                    R$ {(item.preco * (item.quantidade || 1)).toFixed(2).replace('.', ',')}
-                  </span>
-                </li>
-              ))}
+              {cartItems.map((item) => {
+                const quantidade = item.quantidade ?? 1;
+                return (
+                  <li key={item.id} className="flex justify-between pt-3">
+                    <span>
+                      {item.nome} {quantidade > 1 && `x ${quantidade}`}
+                    </span>
+                    <span>
+                      R$ {(item.preco * quantidade).toFixed(2).replace('.', ',')}
+                    </span>
+                  </li>
+                );
+              })}
             </ul>
             <p className="text-right font-bold text-xl">
               Total: <span className="text-green-600">R$ {total.toFixed(2).replace('.', ',')}</span>
