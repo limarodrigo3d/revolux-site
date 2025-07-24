@@ -1,3 +1,4 @@
+// tailwind.config.ts
 import type { Config } from 'tailwindcss';
 
 const config: Config = {
@@ -12,7 +13,7 @@ const config: Config = {
         inter: ['Inter', 'sans-serif'],
       },
       colors: {
-        primary: '#0057D8',
+        primary: '#2B3DD4', // <- azul da logo
         gold: '#D4AF37',
         dark: '#0A0A23',
       },
