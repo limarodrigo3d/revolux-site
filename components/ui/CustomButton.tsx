@@ -9,10 +9,11 @@ type Props = {
 
 export default function CustomButton({ href, children }: Props) {
   return (
-    <Link href={href}>
-      <div className="bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-lg text-lg transition text-center inline-block">
-        {children}
-      </div>
+    <Link
+      href={href}
+      className="inline-block bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-lg text-base md:text-lg font-medium transition-colors duration-200 shadow-md"
+    >
+      {children}
     </Link>
   );
 }

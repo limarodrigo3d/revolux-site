@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 
 export type Produto = {
   id: string;
@@ -14,6 +14,8 @@ type CartContextType = {
   addToCart: (produto: Produto) => void;
   removeFromCart: (id: string) => void;
   clearCart: () => void;
+  totalItems: number;
+  totalPrice: number;
 };
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -43,9 +45,15 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     setCartItems([]);
   };
 
+  const totalItems = cartItems.reduce((acc, item) => acc + (item.quantidade ?? 1), 0);
+  const totalPrice = cartItems.reduce(
+    (acc, item) => acc + item.preco * (item.quantidade ?? 1),
+    0
+  );
+
   return (
     <CartContext.Provider
-      value={{ cartItems, addToCart, removeFromCart, clearCart }}
+      value={{ cartItems, addToCart, removeFromCart, clearCart, totalItems, totalPrice }}
     >
       {children}
     </CartContext.Provider>

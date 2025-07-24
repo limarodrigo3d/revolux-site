@@ -15,15 +15,17 @@ export default function FloatingCartButton() {
   if (totalQuantidade === 0) return null;
 
   return (
-    <div className="fixed bottom-24 right-6 z-50 animate-fade-in">
+    <div className="fixed bottom-24 right-6 z-50 animate-fade-in drop-shadow-xl">
       <Link href="/checkout">
         <button
-          className="flex items-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-black font-semibold px-5 py-3 rounded-full shadow-lg transition duration-300"
-          aria-label={`Ver carrinho com ${totalQuantidade} item(ns)`}
+          className="flex items-center gap-2 bg-yellow-400 hover:bg-yellow-500 text-[#0A0A23] font-semibold px-5 py-3 rounded-full shadow-lg transition-all duration-300"
+          aria-label={`Ver carrinho com ${totalQuantidade} item(s)`}
           title={`Ver carrinho (${totalQuantidade})`}
         >
           <ShoppingCart size={20} />
-          Ver Carrinho ({totalQuantidade})
+          <span className="whitespace-nowrap">
+            Ver Carrinho ({totalQuantidade})
+          </span>
         </button>
       </Link>
     </div>

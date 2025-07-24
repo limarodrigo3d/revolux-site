@@ -2,14 +2,19 @@ import type { Config } from 'tailwindcss';
 
 const config: Config = {
   content: [
-    './app/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
+    './app/**/*.{js,ts,jsx,tsx}',
+    './components/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
     extend: {
       fontFamily: {
         sans: ['Poppins', 'sans-serif'],
         inter: ['Inter', 'sans-serif'],
+      },
+      colors: {
+        primary: '#0057D8',
+        gold: '#D4AF37',
+        dark: '#0A0A23',
       },
       animation: {
         'fade-in': 'fade-in 1s ease-out both',

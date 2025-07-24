@@ -38,25 +38,29 @@ export default function SolucoesPage() {
   ];
 
   return (
-    <main className="min-h-screen pt-28 px-6 pb-16 bg-white text-gray-800 animate-fade-in">
-      <div className="max-w-5xl mx-auto text-center">
-        <h1 className="text-3xl md:text-4xl font-bold mb-4 text-blue-700">
-          Nossas Soluções
-        </h1>
-        <p className="mb-10 text-lg text-gray-600">
+    <main className="min-h-screen pt-28 px-6 pb-20 bg-gray-50 text-gray-800 animate-fade-in">
+      <div className="max-w-6xl mx-auto text-center">
+        <h1 className="text-4xl font-extrabold mb-4 text-blue-700">Nossas Soluções</h1>
+        <p className="mb-12 text-lg text-gray-600">
           Conheça os tipos de certificados digitais que oferecemos para você e sua empresa.
         </p>
 
-        <section className="grid gap-8 md:grid-cols-2 text-left">
+        <section className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 text-left">
           {opcoes.map((item, index) => (
             <Link
               href={item.href}
               key={index}
-              className="bg-gray-50 border rounded-xl p-6 shadow-sm hover:shadow-md transition block"
+              className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm hover:shadow-lg hover:border-blue-600 transition-all block"
             >
-              <CheckCircle className="text-blue-600 mb-3" size={28} />
-              <h2 className="text-lg font-semibold mb-1">{item.title}</h2>
-              <p className="text-sm text-gray-600">{item.description}</p>
+              <div className="flex items-start gap-3">
+                <CheckCircle className="text-blue-600 mt-1" size={24} />
+                <div>
+                  <h2 className="text-lg font-semibold text-gray-900 mb-1">
+                    {item.title}
+                  </h2>
+                  <p className="text-sm text-gray-600">{item.description}</p>
+                </div>
+              </div>
             </Link>
           ))}
         </section>
