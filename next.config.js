@@ -11,12 +11,14 @@ const nextConfig = {
             key: 'Content-Security-Policy',
             value: `
               default-src 'self';
-              script-src 'self' ${isDev ? "'unsafe-inline'" : ''} https://gc.kis.v2.scr.kaspersky-labs.com;
+              script-src 'self' ${isDev ? "'unsafe-inline' 'unsafe-eval'" : ''} https://gc.kis.v2.scr.kaspersky-labs.com;
               style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
               font-src 'self' https://fonts.gstatic.com;
               img-src 'self' data: blob:;
+              connect-src 'self' https://gc.kis.v2.scr.kaspersky-labs.com;
               object-src 'none';
               frame-ancestors 'none';
+              base-uri 'self';
             `.replace(/\s{2,}/g, ' ').trim(),
           },
           {

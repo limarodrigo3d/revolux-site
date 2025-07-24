@@ -9,7 +9,7 @@ import {
 
 export default function Home() {
   return (
-    <div className="space-y-16">
+    <main className="space-y-16">
       <HeroSection />
       <VantagensSection />
       <CertificadosSection />
@@ -19,6 +19,6 @@ export default function Home() {
           Fale com a Revolux
         </CustomButton>
       </div>
-    </div>
+    </main>
   );
 }
