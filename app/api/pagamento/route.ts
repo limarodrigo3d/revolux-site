@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
-import mercadopago from 'mercadopago';
+import { MercadoPagoConfig } from 'mercadopago';
 
-mercadopago.configure({
-  access_token: process.env.MP_ACCESS_TOKEN!, // já deve existir
+const mercadopago = new MercadoPagoConfig({
+  accessToken: process.env.MP_ACCESS_TOKEN!,
 });
 
 export async function POST(req: Request) {
@@ -32,6 +32,9 @@ export async function POST(req: Request) {
     return NextResponse.json({ init_point: preference.body.init_point });
   } catch (error) {
     console.error('Erro ao criar preferência:', error);
-    return NextResponse.json({ error: 'Erro ao criar preferência' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Erro ao criar preferência' },
+      { status: 500 }
+    );
   }
 }
