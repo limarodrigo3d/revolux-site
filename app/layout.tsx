@@ -22,6 +22,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="font-sans antialiased text-gray-800 bg-white">
         <CartProvider>
           <Header />
+          {/* Força a geração da classe text-logoBlue */}
+          <div className="hidden text-logoBlue">.</div>
           <main className="min-h-[calc(100vh-200px)]">{children}</main>
           <Footer />
           <WhatsappButton />

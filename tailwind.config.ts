@@ -13,7 +13,8 @@ const config: Config = {
         inter: ['Inter', 'sans-serif'],
       },
       colors: {
-        primary: '#2B3DD4', // <- azul da logo
+        primary: '#2B3DD4', // azul original da logo
+        logoBlue: '#1e40af', // azul mais escuro da imagem da logo
         gold: '#D4AF37',
         dark: '#0A0A23',
       },

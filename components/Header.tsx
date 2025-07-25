@@ -12,12 +12,12 @@ export default function Header() {
   const toggleSubMenu = () => setSubMenuOpen(!subMenuOpen);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-white shadow-sm border-b border-gray-200">
-      <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-white shadow-xs border-b border-gray-100">
+      <div className="max-w-7xl mx-auto px-6 py-2 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
           <img src="/logo.png" alt="Logo Revolux" className="h-12 md:h-16" />
-          <span className="text-lg md:text-xl font-semibold text-gray-800">
+          <span className="text-lg md:text-xl font-semibold text-logoBlue">
             Revolux Certificados
           </span>
         </Link>
