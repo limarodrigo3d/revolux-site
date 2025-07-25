@@ -1,16 +1,17 @@
 import { NextResponse } from 'next/server';
 import mercadopago from 'mercadopago';
 
-mercadopago.configurations.setAccessToken(process.env.MP_ACCESS_TOKEN!);
+mercadopago.configure({
+  access_token: process.env.MP_ACCESS_TOKEN!,
+});
 
 export async function POST(req: Request) {
   try {
     const body = await req.json();
 
-    const baseURL =
-      process.env.NEXT_PUBLIC_SITE_URL || 'https://revolux-site.vercel.app';
+    const baseURL = process.env.NEXT_PUBLIC_SITE_URL || 'https://revolux-site.vercel.app';
 
-    const preference = {
+    const preferenceRequest = {
       items: body.items.map((item: any) => ({
         id: item.id || 'produto-1',
         title: item.nome || item.title,
@@ -30,7 +31,7 @@ export async function POST(req: Request) {
       },
     };
 
-    const response = await mercadopago.preferences.create(preference);
+    const response = await mercadopago.preferences.create(preferenceRequest);
 
     return NextResponse.json({ init_point: response.body.init_point });
   } catch (error) {
