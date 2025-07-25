@@ -68,31 +68,36 @@ export default function CheckoutPage() {
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label className="block text-sm font-medium mb-1">Nome completo</label>
+            <label className="block text-sm font-medium mb-1" htmlFor="nome">Nome completo</label>
             <input
+              id="nome"
               type="text"
               value={nome}
               onChange={(e) => setNome(e.target.value)}
               className="w-full border border-gray-300 rounded px-4 py-2"
               required
+              autoComplete="name"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">E-mail</label>
+            <label className="block text-sm font-medium mb-1" htmlFor="email">E-mail</label>
             <input
+              id="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full border border-gray-300 rounded px-4 py-2"
               required
+              autoComplete="email"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">CPF</label>
+            <label className="block text-sm font-medium mb-1" htmlFor="cpf">CPF</label>
             <InputMask
               mask="999.999.999-99"
+              id="cpf"
               value={cpf}
               onChange={(e) => setCpf(e.target.value)}
               className="w-full border border-gray-300 rounded px-4 py-2"
@@ -101,9 +106,10 @@ export default function CheckoutPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Telefone</label>
+            <label className="block text-sm font-medium mb-1" htmlFor="telefone">Telefone</label>
             <InputMask
               mask="(99) 99999-9999"
+              id="telefone"
               value={telefone}
               onChange={(e) => setTelefone(e.target.value)}
               className="w-full border border-gray-300 rounded px-4 py-2"
