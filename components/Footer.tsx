@@ -47,7 +47,7 @@ export default function Footer() {
           </a>
           <div className="mt-4 flex gap-4 justify-start">
             <a
-              href="https://www.instagram.com/revoluxcertificados"
+              href="https://www.instagram.com/revolux_certificadodigital"
               target="_blank"
               rel="noopener noreferrer"
               className="text-[#0057D8] hover:text-black text-xl transition-transform hover:scale-110"
