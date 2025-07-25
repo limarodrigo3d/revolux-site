@@ -1,33 +1,61 @@
-'use client';
+"use client";
+import { motion } from "framer-motion";
+import { useCart } from "@/context/CartContext";
 
-import Link from 'next/link';
-import { ShoppingCart } from 'lucide-react';
-import { useCart } from '@/context/CartContext';
+export default function FloatingCart() {
+  const { cartItems, removeFromCart, clearCart } = useCart();
 
-export default function FloatingCartButton() {
-  const { cartItems } = useCart();
+  const total = cartItems.reduce((acc, item) => acc + item.preco * (item.quantidade || 1), 0);
 
-  const totalQuantidade = cartItems.reduce(
-    (total, item) => total + (item.quantidade ?? 1),
-    0
-  );
-
-  if (totalQuantidade === 0) return null;
+  if (cartItems.length === 0) return null;
 
   return (
-    <div className="fixed bottom-24 right-6 z-50 animate-fade-in drop-shadow-xl">
-      <Link href="/checkout">
+    <motion.div
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.3 }}
+      className="fixed right-5 bottom-20 bg-white shadow-xl rounded-xl p-6 w-72 z-50"
+    >
+      <h2 className="text-lg font-semibold text-gray-800 mb-4 border-b pb-2">
+        Carrinho
+      </h2>
+
+      <ul className="space-y-3 mb-4">
+        {cartItems.map((item) => (
+          <li key={item.id} className="flex justify-between items-center">
+            <div>
+              <p className="text-sm text-gray-700 font-medium">{item.nome}</p>
+              <p className="text-xs text-gray-500">Qtd: {item.quantidade || 1}</p>
+              <p className="text-xs text-gray-500">
+                R$ {(item.preco * (item.quantidade || 1)).toFixed(2)}
+              </p>
+            </div>
+            <button
+              onClick={() => removeFromCart(item.id)}
+              className="text-red-400 hover:text-red-600 text-sm"
+            >
+              ✕
+            </button>
+          </li>
+        ))}
+      </ul>
+
+      <p className="font-bold text-gray-800 mb-4 border-t pt-2">Total: R$ {total.toFixed(2)}</p>
+
+      <div className="space-y-2">
         <button
-          className="flex items-center gap-2 bg-yellow-400 hover:bg-yellow-500 text-[#0A0A23] font-semibold px-5 py-3 rounded-full shadow-lg transition-all duration-300"
-          aria-label={`Ver carrinho com ${totalQuantidade} item(s)`}
-          title={`Ver carrinho (${totalQuantidade})`}
+          onClick={clearCart}
+          className="w-full bg-gray-200 text-gray-700 hover:bg-gray-300 py-2 rounded-lg transition"
         >
-          <ShoppingCart size={20} />
-          <span className="whitespace-nowrap">
-            Ver Carrinho ({totalQuantidade})
-          </span>
+          Esvaziar Carrinho
         </button>
-      </Link>
-    </div>
+        <button
+          className="w-full bg-green-500 text-white hover:bg-green-600 py-2 rounded-lg transition"
+          onClick={() => window.location.href = '/checkout'}
+        >
+          Finalizar Compra
+        </button>
+      </div>
+    </motion.div>
   );
 }
