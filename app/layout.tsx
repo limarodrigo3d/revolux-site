@@ -4,8 +4,8 @@ import { CartProvider } from '@/context/CartContext';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import WhatsappButton from '@/components/WhatsappButton';
-import CarrinhoResumo from '@/components/CarrinhoResumo';
-import Carrinho from '@/components/Carrinho'; // importe o carrinho completo
+// import CarrinhoResumo from '@/components/CarrinhoResumo'; // Removido do layout global
+// import Carrinho from '@/components/Carrinho'; // Removido do layout global
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -25,8 +25,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <main className="min-h-[calc(100vh-200px)]">{children}</main>
           <Footer />
           <WhatsappButton />
-          <CarrinhoResumo /> {/* Resumo fixo do carrinho */}
-          <Carrinho /> {/* Lista detalhada, edição e finalizar compra */}
+          {/* CarrinhoResumo e Carrinho foram removidos daqui.
+              Eles devem ser usados apenas dentro de /app/carrinho/page.tsx se necessário. */}
         </CartProvider>
       </body>
     </html>

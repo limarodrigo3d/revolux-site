@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-export default function ContatoPage() {
+export default function PaginaContato() {
   const [formData, setFormData] = useState({ nome: '', email: '', mensagem: '' });
   const [enviado, setEnviado] = useState(false);
 
@@ -12,30 +12,29 @@ export default function ContatoPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
-    // Aqui você pode integrar com API de email, backend, ou Vercel Forms
+    // Aqui você pode integrar com Vercel Forms, Resend, Formspree, etc.
     setEnviado(true);
     setFormData({ nome: '', email: '', mensagem: '' });
   };
 
   return (
-    <main className="min-h-screen pt-28 px-6 pb-20 bg-gray-50 text-gray-800 animate-fade-in">
+    <main className="min-h-screen pt-28 px-6 pb-20 bg-gradient-to-b from-gray-50 to-white text-gray-800 animate-fade-in">
       <div className="max-w-2xl mx-auto">
-        <h1 className="text-4xl font-bold text-blue-700 mb-4 text-center">
-          Entre em Contato
+        <h1 className="text-4xl font-extrabold text-blue-700 mb-4 text-center">
+          Fale Conosco
         </h1>
         <p className="text-center text-gray-600 mb-10">
-          Estamos prontos para ajudar você com seu certificado digital. Envie sua dúvida ou solicitação.
+          Estamos prontos para ajudar. Envie sua mensagem e retornaremos o mais rápido possível.
         </p>
 
         {enviado ? (
-          <div className="bg-green-100 border border-green-400 text-green-800 px-6 py-5 rounded-lg text-center shadow-md">
+          <div className="bg-green-50 border border-green-400 text-green-700 px-6 py-5 rounded-lg text-center shadow-md transition-all">
             ✅ Sua mensagem foi enviada com sucesso! Em breve retornaremos.
           </div>
         ) : (
           <form
             onSubmit={handleSubmit}
-            className="space-y-6 bg-white p-8 rounded-2xl shadow-md border border-gray-200"
+            className="space-y-6 bg-white p-8 rounded-2xl shadow-lg border border-gray-100"
           >
             <div>
               <label htmlFor="nome" className="block text-sm font-medium text-gray-700">
@@ -84,12 +83,22 @@ export default function ContatoPage() {
 
             <button
               type="submit"
-              className="w-full bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition-all duration-200 shadow"
+              className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-all duration-200 shadow-md"
             >
               Enviar Mensagem
             </button>
           </form>
         )}
+
+        {/* Link para WhatsApp (opcional) */}
+        <a
+          href="https://wa.me/553235328411"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="block text-center mt-6 text-blue-700 font-semibold hover:underline"
+        >
+          Ou fale conosco direto no WhatsApp →
+        </a>
       </div>
     </main>
   );

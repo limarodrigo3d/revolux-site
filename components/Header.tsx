@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
 import { useState } from "react";
 import Link from "next/link";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ShoppingCart } from "lucide-react";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -47,6 +47,15 @@ export default function Header() {
           </div>
 
           <Link href="/contato" className="hover:text-blue-600 transition">Contato</Link>
+
+          {/* Carrinho */}
+          <Link
+            href="/carrinho"
+            className="flex items-center gap-1 hover:text-blue-600 transition"
+          >
+            <ShoppingCart size={18} />
+            Carrinho
+          </Link>
         </nav>
 
         {/* Botão hamburguer mobile */}
@@ -85,6 +94,7 @@ export default function Header() {
           )}
 
           <Link href="/contato" className="block hover:text-blue-600 transition">Contato</Link>
+          <Link href="/carrinho" className="block hover:text-blue-600 transition">🛒 Carrinho</Link>
         </div>
       )}
     </header>

@@ -1,19 +1,21 @@
+// app/api/pagamento/route.ts
 import { NextResponse } from "next/server";
 import mercadopago from "mercadopago";
 
-// Criar a instância corretamente
-const mp = new mercadopago({
-  accessToken: process.env.MP_ACCESS_TOKEN!,
+// ✅ Configuração correta da SDK do Mercado Pago
+mercadopago.configure({
+  access_token: process.env.MP_ACCESS_TOKEN!,
 });
 
 export async function POST(req: Request) {
   try {
     const body = await req.json();
 
-    const baseURL = process.env.NEXT_PUBLIC_SITE_URL || "https://revolux-site.vercel.app";
+    const baseURL =
+      process.env.NEXT_PUBLIC_SITE_URL || "https://revolux-site.vercel.app";
 
-    // Criar a preferência diretamente pelo objeto 'mp'
-    const response = await mp.preferences.create({
+    // ✅ Criação da preferência de pagamento
+    const preference = {
       items: body.items.map((item: any) => ({
         id: item.id || "produto-1",
         title: item.nome || item.title,
@@ -31,7 +33,9 @@ export async function POST(req: Request) {
         name: body.nome,
         email: body.email,
       },
-    });
+    };
+
+    const response = await mercadopago.preferences.create(preference);
 
     return NextResponse.json({ init_point: response.body.init_point });
   } catch (error) {

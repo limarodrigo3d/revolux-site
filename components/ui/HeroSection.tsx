@@ -51,8 +51,10 @@ export default function HeroSection() {
               style={{
                 backgroundImage: `url(${images[index]})`,
               }}
+              role="img"
+              aria-label="Mulher representando confiança"
             >
-              <div className="w-full h-full bg-black/60" />
+              <div className="w-full h-full bg-gradient-to-b from-black/60 to-black/80" />
             </div>
           </motion.div>
         )}
@@ -61,14 +63,14 @@ export default function HeroSection() {
       <div className="absolute inset-0 flex items-center justify-center z-10 px-6 text-center">
         <div className="max-w-3xl">
           <h1 className="text-4xl md:text-5xl font-extrabold text-white drop-shadow-xl mb-8 leading-tight">
-            A confiança que você busca,<br className="hidden md:inline" />
-            a segurança que você precisa.
+            Certificação digital com atendimento humano,<br className="hidden md:inline" />
+            seguro e sem complicações.
           </h1>
           <a
             href="/contato"
-            className="inline-block bg-blue-600 hover:bg-blue-700 text-white text-lg font-medium px-6 py-3 rounded-lg shadow-lg transition-all"
+            className="inline-block bg-blue-600 hover:bg-blue-700 text-white text-lg font-semibold px-6 py-3 rounded-lg shadow-lg transition"
           >
-            Fale com a Revolux
+            Solicitar Certificado
           </a>
         </div>
       </div>
