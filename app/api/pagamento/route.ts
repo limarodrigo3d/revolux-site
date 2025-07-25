@@ -1,9 +1,7 @@
 import { NextResponse } from 'next/server';
-import { MercadoPagoConfig, Preference } from 'mercadopago';
+import mercadopago from 'mercadopago';
 
-const mercadopago = new MercadoPagoConfig({
-  accessToken: process.env.MP_ACCESS_TOKEN!,
-});
+mercadopago.configurations.setAccessToken(process.env.MP_ACCESS_TOKEN!);
 
 export async function POST(req: Request) {
   try {
@@ -12,29 +10,29 @@ export async function POST(req: Request) {
     const baseURL =
       process.env.NEXT_PUBLIC_SITE_URL || 'https://revolux-site.vercel.app';
 
-    const preference = new Preference(mercadopago);
-
-    const result = await preference.create({
-      body: {
-        items: [
-          {
-            id: body.id || 'produto-1',
-            title: body.title,
-            quantity: 1,
-            currency_id: 'BRL',
-            unit_price: body.price,
-          },
-        ],
-        back_urls: {
-          success: `${baseURL}/obrigado`,
-          failure: `${baseURL}/erro`,
-          pending: `${baseURL}/pendente`,
-        },
-        auto_return: 'approved',
+    const preference = {
+      items: body.items.map((item: any) => ({
+        id: item.id || 'produto-1',
+        title: item.nome || item.title,
+        quantity: item.quantidade || 1,
+        currency_id: 'BRL',
+        unit_price: item.preco || item.price,
+      })),
+      back_urls: {
+        success: `${baseURL}/obrigado`,
+        failure: `${baseURL}/erro`,
+        pending: `${baseURL}/pendente`,
       },
-    });
+      auto_return: 'approved',
+      payer: {
+        name: body.nome,
+        email: body.email,
+      },
+    };
 
-    return NextResponse.json({ init_point: result.init_point });
+    const response = await mercadopago.preferences.create(preference);
+
+    return NextResponse.json({ init_point: response.body.init_point });
   } catch (error) {
     console.error('Erro ao criar preferência:', error);
     return NextResponse.json(
