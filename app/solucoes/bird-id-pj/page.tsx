@@ -1,6 +1,6 @@
 'use client';
 
-import { useCart } from '@/context/CartContext'; // ✅ Correto
+import { useState } from 'react';
 
 const opcoes = [
   {
@@ -11,7 +11,43 @@ const opcoes = [
 ];
 
 export default function Page() {
-  const { addToCart } = useCart(); // ✅ Correto
+  const [loadingId, setLoadingId] = useState<string | null>(null);
+
+  const handleCheckout = async (produto: typeof opcoes[0]) => {
+    setLoadingId(produto.id);
+
+    try {
+      const response = await fetch('/api/pagamento', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          items: [
+            {
+              id: produto.id,
+              nome: produto.nome,
+              preco: produto.preco,
+              quantidade: 1,
+            },
+          ],
+          nome: 'Cliente Revolux',
+          email: 'cliente@revolux.com.br',
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data?.init_point) {
+        window.location.href = data.init_point;
+      } else {
+        alert('Erro ao redirecionar para o pagamento.');
+      }
+    } catch (error) {
+      console.error('Erro ao criar preferência:', error);
+      alert('Erro ao processar o pagamento.');
+    } finally {
+      setLoadingId(null);
+    }
+  };
 
   return (
     <main className="min-h-screen bg-white px-6 pt-28 pb-16 text-gray-800 animate-fade-in">
@@ -24,27 +60,25 @@ export default function Page() {
         </p>
 
         <div className="grid gap-6 md:grid-cols-2 text-left">
-          {opcoes.map((opcao) => (
+          {opcoes.map((produto) => (
             <div
-              key={opcao.id}
+              key={produto.id}
               className="bg-gray-50 border rounded-xl p-6 shadow-sm hover:shadow-md transition"
             >
-              <h2 className="text-lg font-semibold text-gray-900 mb-2">{opcao.nome}</h2>
+              <h2 className="text-lg font-semibold text-gray-900 mb-2">{produto.nome}</h2>
               <p className="text-sm text-gray-700 mb-4">
-                R$ {opcao.preco.toFixed(2).replace('.', ',')}
+                R$ {produto.preco.toFixed(2).replace('.', ',')}
               </p>
               <button
-                onClick={() =>
-                  addToCart({
-                    id: opcao.id,
-                    nome: opcao.nome,
-                    preco: opcao.preco,
-                    quantidade: 1,
-                  })
-                }
-                className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition"
+                onClick={() => handleCheckout(produto)}
+                disabled={loadingId === produto.id}
+                className={`w-full py-2 px-4 rounded text-white font-medium transition ${
+                  loadingId === produto.id
+                    ? 'bg-blue-300 cursor-not-allowed'
+                    : 'bg-blue-600 hover:bg-blue-700'
+                }`}
               >
-                Comprar
+                {loadingId === produto.id ? 'Redirecionando...' : 'Comprar agora'}
               </button>
             </div>
           ))}

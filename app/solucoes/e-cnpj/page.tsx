@@ -1,6 +1,6 @@
 'use client';
 
-import { useCart } from '@/context/CartContext'; // ✅ Correto
+import { useState } from 'react';
 
 const opcoes = [
   {
@@ -21,7 +21,34 @@ const opcoes = [
 ];
 
 export default function Page() {
-  const { addToCart } = useCart(); // ✅ Corrigido
+  const [loadingId, setLoadingId] = useState<string | null>(null);
+
+  const comprar = async (produto: typeof opcoes[number]) => {
+    setLoadingId(produto.id);
+    try {
+      const res = await fetch('/api/pagamento', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          items: [produto],
+          nome: 'Cliente',
+          email: 'cliente@email.com', // pode ser dinâmico futuramente
+        }),
+      });
+
+      const data = await res.json();
+      if (data.init_point) {
+        window.location.href = data.init_point;
+      } else {
+        alert('Erro ao iniciar pagamento.');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Erro ao processar pagamento.');
+    } finally {
+      setLoadingId(null);
+    }
+  };
 
   return (
     <main className="min-h-screen bg-white px-6 pt-28 pb-16 text-gray-800 animate-fade-in">
@@ -44,17 +71,11 @@ export default function Page() {
                 R$ {opcao.preco.toFixed(2).replace('.', ',')}
               </p>
               <button
-                onClick={() =>
-                  addToCart({
-                    id: opcao.id,
-                    nome: opcao.nome,
-                    preco: opcao.preco,
-                    quantidade: 1,
-                  })
-                }
-                className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition"
+                onClick={() => comprar(opcao)}
+                disabled={loadingId === opcao.id}
+                className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition disabled:opacity-50"
               >
-                Comprar
+                {loadingId === opcao.id ? 'Redirecionando...' : 'Comprar agora'}
               </button>
             </div>
           ))}
