@@ -4,7 +4,8 @@ import { CartProvider } from '@/context/CartContext';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import WhatsappButton from '@/components/WhatsappButton';
-import CarrinhoResumo from '@/components/CarrinhoResumo'; // importe aqui
+import CarrinhoResumo from '@/components/CarrinhoResumo';
+import Carrinho from '@/components/Carrinho'; // importe o carrinho completo
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -24,7 +25,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <main className="min-h-[calc(100vh-200px)]">{children}</main>
           <Footer />
           <WhatsappButton />
-          <CarrinhoResumo /> {/* Aqui o resumo do carrinho */}
+          <CarrinhoResumo /> {/* Resumo fixo do carrinho */}
+          <Carrinho /> {/* Lista detalhada, edição e finalizar compra */}
         </CartProvider>
       </body>
     </html>
