@@ -3,7 +3,7 @@ const isDev = process.env.NODE_ENV !== 'production';
 
 const nextConfig = {
   eslint: {
-    ignoreDuringBuilds: true, // impede erro no Vercel se ESLint falhar
+    ignoreDuringBuilds: true, // evita erro no build da Vercel por problemas no ESLint
   },
   async headers() {
     return [
@@ -14,9 +14,9 @@ const nextConfig = {
             key: 'Content-Security-Policy',
             value: `
               default-src 'self';
-              script-src 'self' ${isDev ? "'unsafe-inline' 'unsafe-eval'" : ''} https://gc.kis.v2.scr.kaspersky-labs.com;
+              script-src 'self' 'unsafe-inline' ${isDev ? "'unsafe-eval'" : ''} https://gc.kis.v2.scr.kaspersky-labs.com;
               style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-              font-src 'self' https://fonts.gstatic.com;
+              font-src 'self' https://fonts.gstatic.com data:;
               img-src 'self' data: blob:;
               connect-src 'self' https://gc.kis.v2.scr.kaspersky-labs.com;
               object-src 'none';
