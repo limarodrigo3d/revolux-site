@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useCart } from '@/context/CartContext';
+import InputMask from 'react-input-mask';
 
 export default function CheckoutPage() {
   const { cartItems, clearCart } = useCart();
@@ -10,22 +11,46 @@ export default function CheckoutPage() {
 
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
+  const [cpf, setCpf] = useState('');
+  const [telefone, setTelefone] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const total = cartItems.reduce(
     (acc, item) => acc + item.preco * (item.quantidade || 1),
     0
   );
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
 
-    // Aqui você pode enviar os dados para uma API ou serviço de pagamento
-    console.log('Nome:', nome);
-    console.log('Email:', email);
-    console.log('Itens do carrinho:', cartItems);
+    try {
+      const response = await fetch('/api/pagamento', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          items: cartItems,
+          nome,
+          email,
+          cpf,
+          telefone,
+        }),
+      });
 
-    clearCart(); // limpa o carrinho
-    router.push('/obrigado'); // redireciona
+      const data = await response.json();
+
+      if (data?.init_point) {
+        clearCart();
+        window.location.href = data.init_point;
+      } else {
+        alert('Erro ao iniciar pagamento.');
+        setLoading(false);
+      }
+    } catch (err) {
+      console.error('Erro no checkout:', err);
+      alert('Erro ao processar o pagamento.');
+      setLoading(false);
+    }
   };
 
   if (cartItems.length === 0) {
@@ -43,7 +68,7 @@ export default function CheckoutPage() {
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label className="block text-sm font-medium mb-1">Nome</label>
+            <label className="block text-sm font-medium mb-1">Nome completo</label>
             <input
               type="text"
               value={nome}
@@ -65,6 +90,28 @@ export default function CheckoutPage() {
           </div>
 
           <div>
+            <label className="block text-sm font-medium mb-1">CPF</label>
+            <InputMask
+              mask="999.999.999-99"
+              value={cpf}
+              onChange={(e) => setCpf(e.target.value)}
+              className="w-full border border-gray-300 rounded px-4 py-2"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1">Telefone</label>
+            <InputMask
+              mask="(99) 99999-9999"
+              value={telefone}
+              onChange={(e) => setTelefone(e.target.value)}
+              className="w-full border border-gray-300 rounded px-4 py-2"
+              required
+            />
+          </div>
+
+          <div>
             <h2 className="text-lg font-semibold mb-2">Resumo do Pedido</h2>
             <ul className="space-y-2">
               {cartItems.map((item) => (
@@ -73,21 +120,24 @@ export default function CheckoutPage() {
                     {item.nome} x {item.quantidade}
                   </span>
                   <span>
-                    R$ {(item.preco * (item.quantidade || 1)).toFixed(2)}
+                    R$ {(item.preco * (item.quantidade || 1)).toFixed(2).replace('.', ',')}
                   </span>
                 </li>
               ))}
             </ul>
             <p className="text-right mt-4 font-bold text-lg">
-              Total: R$ {total.toFixed(2)}
+              Total: R$ {total.toFixed(2).replace('.', ',')}
             </p>
           </div>
 
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-3 rounded hover:bg-blue-700 transition"
+            disabled={loading}
+            className={`w-full bg-blue-600 text-white py-3 rounded hover:bg-blue-700 transition ${
+              loading ? 'opacity-50 cursor-not-allowed' : ''
+            }`}
           >
-            Confirmar e Finalizar
+            {loading ? 'Processando...' : 'Confirmar e Finalizar'}
           </button>
         </form>
       </div>
