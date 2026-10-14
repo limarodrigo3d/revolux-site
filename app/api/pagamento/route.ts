@@ -1,57 +1,98 @@
-import { NextResponse } from "next/server";
-import { MercadoPagoConfig, Preference } from "mercadopago";
+import { NextResponse } from 'next/server';
+import { MercadoPagoConfig, Preference } from 'mercadopago';
+import { getProduto, nomeCompleto } from '@/lib/catalogo';
+import { SITE } from '@/lib/site';
+import { dbAtivo, salvarPedido } from '@/lib/db';
 
-// ✅ Cria a instância da nova SDK (v2+)
-const mercadopago = new MercadoPagoConfig({
-  accessToken: process.env.MP_ACCESS_TOKEN!,
-});
-
-// ✅ Cria a instância da Preference
-const preference = new Preference(mercadopago);
+const soNumeros = (v: unknown) => String(v ?? '').replace(/\D/g, '');
+const texto = (v: unknown, max = 120) => String(v ?? '').trim().slice(0, max);
 
 export async function POST(req: Request) {
   try {
+    if (!process.env.MP_ACCESS_TOKEN) {
+      console.error('MP_ACCESS_TOKEN não configurado');
+      return NextResponse.json({ error: 'Pagamento indisponível no momento.' }, { status: 500 });
+    }
+
     const body = await req.json();
 
-    const baseURL = process.env.NEXT_PUBLIC_SITE_URL || "https://revolux-site.vercel.app";
+    // O preço vem SEMPRE do catálogo do servidor, nunca do navegador.
+    const produto = getProduto(texto(body.produtoId, 40));
+    if (!produto) {
+      return NextResponse.json({ error: 'Produto inválido.' }, { status: 400 });
+    }
 
-    const preferenceData = {
-      items: body.items.map((item: any) => ({
-        id: item.id || "produto-1",
-        title: item.nome || item.title,
-        quantity: item.quantidade || 1,
-        currency_id: "BRL",
-        unit_price: item.preco || item.price,
-      })),
-      back_urls: {
-        success: `${baseURL}/obrigado`,
-        failure: `${baseURL}/erro`,
-        pending: `${baseURL}/pendente`,
+    const nome = texto(body.nome);
+    const email = texto(body.email);
+    const documento = soNumeros(body.documento);
+    const telefone = soNumeros(body.telefone);
+    const cidade = texto(body.cidade, 80);
+    // Número do pedido gerado no servidor (não aceita número vindo do navegador)
+    const pedido = `RVX${Date.now().toString(36).slice(-5)}${Math.random().toString(36).slice(2, 5)}`.toUpperCase();
+
+    if (!nome || !/^\S+@\S+\.\S+$/.test(email) || ![11, 14].includes(documento.length) || telefone.length < 10) {
+      return NextResponse.json({ error: 'Confira seus dados e tente novamente.' }, { status: 400 });
+    }
+
+    // Registra o pedido no painel (se o banco estiver configurado)
+    try {
+      await salvarPedido({
+        id: pedido,
+        criadoEm: Date.now(),
+        origem: 'site',
+        produtoId: produto.id,
+        produto: nomeCompleto(produto),
+        preco: produto.preco,
+        nome,
+        email,
+        documento: texto(body.documento, 20),
+        telefone: texto(body.telefone, 20),
+        cidade,
+        status: 'aguardando',
+      });
+    } catch (e) {
+      console.error('Não foi possível salvar o pedido no banco', e);
+    }
+
+    const [primeiroNome, ...resto] = nome.split(' ');
+    const baseURL = SITE.url;
+
+    const preference = new Preference(new MercadoPagoConfig({ accessToken: process.env.MP_ACCESS_TOKEN }));
+    const response = await preference.create({
+      body: {
+        items: [
+          {
+            id: produto.id,
+            title: nomeCompleto(produto),
+            quantity: 1,
+            currency_id: 'BRL',
+            unit_price: produto.preco,
+          },
+        ],
+        payer: {
+          name: primeiroNome,
+          surname: resto.join(' '),
+          email,
+          identification: { type: documento.length === 11 ? 'CPF' : 'CNPJ', number: documento },
+          phone: { area_code: telefone.slice(0, 2), number: telefone.slice(2) },
+        },
+        // Aparece no painel do Mercado Pago junto com a venda
+        metadata: { pedido, nome, documento, telefone, cidade, produto: nomeCompleto(produto) },
+        back_urls: {
+          success: `${baseURL}/obrigado`,
+          pending: `${baseURL}/pagamento-pendente`,
+          failure: `${baseURL}/pagamento-erro`,
+        },
+        auto_return: 'approved',
+        ...(dbAtivo() ? { notification_url: `${baseURL}/api/webhook/mercadopago` } : {}),
+        statement_descriptor: 'REVOLUX CERTIFICADOS',
+        external_reference: pedido,
       },
-      auto_return: "approved" as const,
-      payer: {
-        name: body.nome,
-        email: body.email,
-      },
-      notification_url: `${baseURL}/api/webhook/mercadopago`,
-      statement_descriptor: "REVOLUX CERTIFICADOS",
-      external_reference: `order_${Date.now()}`,
-    };
+    });
 
-    // ✅ Usa a instância da Preference para criar
-    const response = await preference.create({ body: preferenceData });
-
-    return NextResponse.json({ init_point: response.init_point });
+    return NextResponse.json({ init_point: response.init_point, pedido });
   } catch (error) {
-    console.error("Erro ao criar preferência:", error);
-    return NextResponse.json({ error: "Erro ao criar preferência" }, { status: 500 });
+    console.error('Erro ao criar preferência:', error);
+    return NextResponse.json({ error: 'Não foi possível iniciar o pagamento.' }, { status: 500 });
   }
-}
-
-// Método GET opcional para verificar se a API está funcionando
-export async function GET() {
-  return NextResponse.json({ 
-    message: 'API de pagamento funcionando',
-    timestamp: new Date().toISOString()
-  });
 }

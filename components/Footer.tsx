@@ -1,80 +1,105 @@
-"use client";
+import Link from 'next/link';
+import Image from 'next/image';
+import { CATEGORIAS } from '@/lib/catalogo';
+import { SEGMENTOS } from '@/lib/segmentos';
+import { SITE, waLink } from '@/lib/site';
+import { Instagram, WhatsIcon } from './Icones';
+import { Guilhoche } from './Documento';
 
-import { FaInstagram, FaWhatsapp } from "react-icons/fa";
+const pagamentos = [
+  ['/visa.svg', 'Visa'],
+  ['/mastercard.svg', 'Mastercard'],
+  ['/elo.svg', 'Elo'],
+  ['/pix.svg', 'Pix'],
+  ['/hipercard.svg', 'Hipercard'],
+  ['/amex.svg', 'American Express'],
+  ['/diners.svg', 'Diners Club'],
+];
 
 export default function Footer() {
   return (
-    <footer className="bg-[#F9FAFB] text-gray-700 pt-12 pb-8 border-t border-gray-200">
-      <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-10 text-sm">
-
-        {/* Acesso Rápido */}
+    <footer className="relative overflow-hidden bg-ink text-white/70">
+      <Guilhoche className="pointer-events-none absolute -bottom-48 -right-40 h-[32rem] w-[32rem] text-white/[.05]" />
+      <div className="container-x relative grid gap-10 py-14 md:grid-cols-[1.3fr_1fr_1fr_1fr]">
         <div>
-          <h4 className="text-[#0057D8] font-semibold mb-4">Acesso Rápido</h4>
-          <ul className="space-y-2">
-            <li><a href="#" className="hover:text-black">Instalação A1</a></li>
-            <li><a href="#" className="hover:text-black">Aplicações e Usos</a></li>
-            <li><a href="#" className="hover:text-black">Renovação</a></li>
-            <li><a href="#" className="hover:text-black">Ajuda</a></li>
-            <li><a href="#" className="hover:text-black">Política de Privacidade</a></li>
-          </ul>
-        </div>
-
-        {/* Formas de Pagamento */}
-        <div>
-          <h4 className="text-[#0057D8] font-semibold mb-4">Formas de Pagamento</h4>
-          <div className="flex flex-wrap gap-4">
-            <img src="/visa.svg" alt="Visa" className="h-6" />
-            <img src="/mastercard.svg" alt="MasterCard" className="h-6" />
-            <img src="/elo.svg" alt="Elo" className="h-6" />
-            <img src="/pix.svg" alt="Pix" className="h-6" />
-            <img src="/hipercard.svg" alt="Hipercard" className="h-6" />
-            <img src="/amex.svg" alt="Amex" className="h-6" />
-            <img src="/diners.svg" alt="Diners Club" className="h-6" />
-          </div>
-        </div>
-
-        {/* Atendimento */}
-        <div>
-          <h4 className="text-[#0057D8] font-semibold mb-4">Atendimento</h4>
-          <a
-            href="https://wa.me/553235328411"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-xl font-medium shadow hover:bg-green-400 transition"
-          >
-            <FaWhatsapp className="text-lg" />
-            WhatsApp Comercial
-          </a>
-          <div className="mt-4 flex gap-4 justify-start">
+          <Image src="/img/logo-branco.png" alt="Revolux Certificado Digital" width={520} height={145} className="h-11 w-auto" />
+          <p className="mt-4 max-w-xs text-sm leading-relaxed">
+            Certificado digital com atendimento humano, emitido por videoconferência para todo o Brasil. Mais de {SITE.anosExperiencia} anos de experiência.
+          </p>
+          {SITE.horario && <p className="mt-2 text-sm">Atendimento: {SITE.horario}</p>}
+          <div className="mt-5 flex items-center gap-3">
+            <a href={waLink()} target="_blank" rel="noopener noreferrer" className="btn-wa !px-4 !py-2.5 text-sm">
+              <WhatsIcon className="h-4 w-4" /> {SITE.whatsappFormatado}
+            </a>
             <a
-              href="https://www.instagram.com/revolux_certificadodigital"
+              href={SITE.instagram}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[#0057D8] hover:text-black text-xl transition-transform hover:scale-110"
-              aria-label="Instagram"
+              aria-label="Instagram da Revolux"
+              className="grid h-11 w-11 place-items-center rounded-xl border border-white/15 text-white transition hover:bg-white/10"
             >
-              <FaInstagram />
+              <Instagram />
             </a>
           </div>
         </div>
+
+        <div>
+          <h2 className="text-sm font-semibold text-white">Certificados</h2>
+          <ul className="mt-4 space-y-2.5 text-sm">
+            {CATEGORIAS.map((c) => (
+              <li key={c.slug}>
+                <Link href={`/solucoes/${c.slug}`} className="hover:text-white">
+                  {c.nome}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div>
+          <h2 className="text-sm font-semibold text-white">Para quem</h2>
+          <ul className="mt-4 space-y-2.5 text-sm">
+            {SEGMENTOS.map((s) => (
+              <li key={s.slug}>
+                <Link href={`/para/${s.slug}`} className="hover:text-white">
+                  {s.menu}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div>
+          <h2 className="text-sm font-semibold text-white">Ajuda</h2>
+          <ul className="mt-4 space-y-2.5 text-sm">
+            <li><Link href="/duvidas#instalacao" className="hover:text-white">Instalação do A1</Link></li>
+            <li><Link href="/duvidas#usos" className="hover:text-white">Aplicações e usos</Link></li>
+            <li><Link href="/renovacao" className="hover:text-white">Renovação</Link></li>
+            <li><Link href="/duvidas" className="hover:text-white">Perguntas frequentes</Link></li>
+            <li><Link href="/contato" className="hover:text-white">Contato</Link></li>
+            <li><Link href="/politica-de-privacidade" className="hover:text-white">Política de Privacidade</Link></li>
+          </ul>
+        </div>
       </div>
 
-      {/* Rodapé inferior */}
-      <div className="mt-10 text-center text-xs text-gray-500 px-4">
-        <p>
-          © 2025 <strong className="text-gray-800">Revolux Certificados Digitais</strong>. Todos os direitos reservados.
-        </p>
-        <p className="mt-1">
-          Desenvolvido por{" "}
-          <a
-            href="https://agenciarevolux.com.br"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-[#0057D8] hover:underline font-semibold"
-          >
-            Agência Revolux®
-          </a>
-        </p>
+      <div className="border-t border-white/10">
+        <div className="container-x flex flex-col items-center justify-between gap-4 py-6 text-xs md:flex-row">
+          <div className="flex flex-wrap items-center justify-center gap-2">
+            {pagamentos.map(([src, alt]) => (
+              <span key={src} className="grid h-7 w-11 place-items-center rounded bg-white">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={src} alt={alt} className="h-4 w-auto" loading="lazy" />
+              </span>
+            ))}
+          </div>
+          <p className="text-center">
+            © {new Date().getFullYear()} {SITE.razaoSocial || 'Revolux Certificado Digital'}
+            {SITE.cnpj && ` · CNPJ ${SITE.cnpj}`} · Desenvolvido por{' '}
+            <a href="https://agenciarevolux.com.br" target="_blank" rel="noopener noreferrer" className="font-semibold text-white hover:underline">
+              Agência Revolux®
+            </a>
+          </p>
+        </div>
       </div>
     </footer>
   );

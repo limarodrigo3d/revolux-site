@@ -1,69 +1,57 @@
-'use client';
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import { CATEGORIAS } from '@/lib/catalogo';
+import { CtaFinal, ProdutoCard, TopoPagina } from '@/components/Blocos';
 
-import { ShieldCheck, Building2, FileText, User, Fingerprint } from 'lucide-react';
-
-const certificados = [
-  {
-    nome: 'e-CPF',
-    desc: 'Certificado Digital para pessoa física.',
-    link: '/solucoes/e-cpf',
-    icon: <ShieldCheck className="text-primary w-6 h-6" />,
-  },
-  {
-    nome: 'e-CNPJ',
-    desc: 'Certificado Digital para empresas.',
-    link: '/solucoes/e-cnpj',
-    icon: <Building2 className="text-primary w-6 h-6" />,
-  },
-  {
-    nome: 'NF-e / CT-e',
-    desc: 'Para emissão de Nota Fiscal e Conhecimento de Transporte.',
-    link: '/solucoes/nfe-cte',
-    icon: <FileText className="text-primary w-6 h-6" />,
-  },
-  {
-    nome: 'Bird ID PF',
-    desc: 'Autenticação moderna para pessoa física.',
-    link: '/solucoes/bird-id-pf',
-    icon: <User className="text-primary w-6 h-6" />,
-  },
-  {
-    nome: 'Bird ID PJ',
-    desc: 'Assinatura por biometria para empresas.',
-    link: '/solucoes/bird-id-pj',
-    icon: <Fingerprint className="text-primary w-6 h-6" />,
-  },
-];
+export const metadata: Metadata = {
+  title: 'Preços de Certificado Digital e-CPF, e-CNPJ, A1, A3 e Bird ID',
+  description:
+    'Veja os preços de todos os certificados digitais: e-CPF a partir de R$ 149,90, e-CNPJ, NF-e/CT-e e Bird ID em nuvem. Emissão por videoconferência para todo o Brasil.',
+  alternates: { canonical: '/certificados' },
+};
 
 export default function CertificadosPage() {
   return (
-    <main className="min-h-screen bg-white px-6 pt-28 pb-20 text-gray-800 animate-fade-in">
-      <div className="max-w-5xl mx-auto text-center">
-        <h1 className="text-3xl md:text-5xl font-extrabold text-primary mb-4">
-          Certificados Digitais
-        </h1>
-        <p className="text-lg md:text-xl text-gray-600 mb-12">
-          Escolha a opção ideal para você ou sua empresa com segurança e praticidade.
-        </p>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-          {certificados.map((item) => (
-            <a
-              key={item.nome}
-              href={item.link}
-              className="group border border-gray-200 rounded-2xl p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all bg-white text-left flex flex-col gap-3"
-            >
-              <div className="flex items-center gap-3">
-                {item.icon}
-                <h2 className="text-lg font-bold text-primary group-hover:underline">
-                  {item.nome}
-                </h2>
-              </div>
-              <p className="text-sm text-gray-600">{item.desc}</p>
+    <>
+      <TopoPagina
+        eyebrow="Certificados e preços"
+        titulo="Escolha o certificado ideal"
+        sub="Preço final, validação por videoconferência inclusa e ajuda na instalação. Compre agora e agende no horário que preferir."
+      >
+        <nav className="flex flex-wrap gap-2" aria-label="Ir para categoria">
+          {CATEGORIAS.map((c) => (
+            <a key={c.slug} href={`#${c.slug}`} className="rounded-full border-[1.5px] border-ink/15 bg-white px-4 py-2 text-sm font-semibold text-ink transition hover:border-carimbo hover:bg-carimbo hover:text-white">
+              {c.nome}
             </a>
           ))}
-        </div>
+        </nav>
+      </TopoPagina>
+
+      <div className="bg-paper">
+        {CATEGORIAS.map((c, i) => (
+          <section key={c.slug} id={c.slug} className={`scroll-mt-20 py-14 md:py-16 ${i > 0 ? 'border-t border-ink/10' : ''}`}>
+            <div className="container-x">
+              <div className="flex flex-col justify-between gap-3 md:flex-row md:items-end">
+                <div>
+                  <p className="eyebrow">{c.tag}</p>
+                  <h2 className="mt-1 text-3xl font-extrabold">{c.titulo}</h2>
+                  <p className="mt-2 max-w-2xl text-ink/65">{c.resumo}</p>
+                </div>
+                <Link href={`/solucoes/${c.slug}`} className="inline-flex shrink-0 items-center gap-2 font-semibold text-carimbo hover:underline">
+                  Saiba mais
+                </Link>
+              </div>
+              <div className="mt-8 grid gap-6 md:grid-cols-3">
+                {c.produtos.map((p) => (
+                  <ProdutoCard key={p.id} p={p} />
+                ))}
+              </div>
+            </div>
+          </section>
+        ))}
       </div>
-    </main>
+
+      <CtaFinal titulo="Não sabe qual escolher? A gente te indica." msg="Olá! Não sei qual certificado preciso. Pode me ajudar a escolher?" />
+    </>
   );
 }

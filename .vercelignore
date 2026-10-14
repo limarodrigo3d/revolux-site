@@ -1,0 +1,5 @@
+node_modules
+.next
+.env*
+_backup-site-antigo
+postcss.config.mjs

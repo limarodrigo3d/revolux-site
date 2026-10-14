@@ -1,35 +1,90 @@
-// app/layout.tsx
 import './globals.css';
-import { CartProvider } from '@/context/CartContext';
+import type { Metadata, Viewport } from 'next';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import WhatsappButton from '@/components/WhatsappButton';
-// import CarrinhoResumo from '@/components/CarrinhoResumo'; // Removido do layout global
-// import Carrinho from '@/components/Carrinho'; // Removido do layout global
-import type { Metadata } from 'next';
+import SiteChrome from '@/components/SiteChrome';
+import Analytics from '@/components/Analytics';
+import { JsonLd } from '@/components/Blocos';
+import { SITE } from '@/lib/site';
+import { MENOR_PRECO } from '@/lib/catalogo';
 
 export const metadata: Metadata = {
-  title: 'Revolux Certificados Digitais',
-  description: 'Certificados digitais com excelência e segurança.',
-  icons: {
-    icon: '/favicon.ico',
+  metadataBase: new URL(SITE.url),
+  title: {
+    default: 'Certificado Digital por Videoconferência para todo o Brasil | Revolux',
+    template: '%s | Revolux Certificado Digital',
+  },
+  description: SITE.descricao,
+  keywords: [
+    'certificado digital',
+    'certificado digital online',
+    'certificado digital por videoconferência',
+    'e-CPF',
+    'e-CNPJ',
+    'certificado A1',
+    'certificado A3',
+    'Bird ID',
+    'certificado digital MEI',
+    'renovar certificado digital',
+  ],
+  applicationName: SITE.nome,
+  openGraph: {
+    type: 'website',
+    locale: 'pt_BR',
+    siteName: SITE.nome,
+    title: 'Certificado digital sem sair de casa, para todo o Brasil',
+    description: SITE.descricao,
+    images: [{ url: '/og.png', width: 1200, height: 630, alt: 'Revolux Certificado Digital' }],
+  },
+  twitter: { card: 'summary_large_image', images: ['/og.png'] },
+  robots: { index: true, follow: true },
+};
+
+export const viewport: Viewport = {
+  themeColor: '#0A1428',
+  width: 'device-width',
+  initialScale: 1,
+};
+
+const orgJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  name: SITE.nome,
+  url: SITE.url,
+  logo: `${SITE.url}/img/logo.png`,
+  image: `${SITE.url}/og.png`,
+  description: SITE.descricao,
+  telephone: `+${SITE.whatsapp}`,
+  areaServed: { '@type': 'Country', name: 'Brasil' },
+  priceRange: `A partir de R$ ${MENOR_PRECO.toFixed(2).replace('.', ',')}`,
+  sameAs: [SITE.instagram],
+  contactPoint: {
+    '@type': 'ContactPoint',
+    telephone: `+${SITE.whatsapp}`,
+    contactType: 'customer service',
+    areaServed: 'BR',
+    availableLanguage: 'Portuguese',
   },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt-BR">
-      <body className="font-sans antialiased text-gray-800 bg-white">
-        <CartProvider>
+      <body>
+        <JsonLd data={orgJsonLd} />
+        <a href="#conteudo" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-lg focus:bg-white focus:px-4 focus:py-2">
+          Pular para o conteúdo
+        </a>
+        <SiteChrome>
           <Header />
-          {/* Força a geração da classe text-logoBlue */}
-          <div className="hidden text-logoBlue">.</div>
-          <main className="min-h-[calc(100vh-200px)]">{children}</main>
+        </SiteChrome>
+        <main id="conteudo">{children}</main>
+        <SiteChrome>
           <Footer />
           <WhatsappButton />
-          {/* CarrinhoResumo e Carrinho foram removidos daqui.
-              Eles devem ser usados apenas dentro de /app/carrinho/page.tsx se necessário. */}
-        </CartProvider>
+        </SiteChrome>
+        <Analytics />
       </body>
     </html>
   );

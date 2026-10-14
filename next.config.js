@@ -2,6 +2,7 @@
 const isDev = process.env.NODE_ENV !== 'production';
 
 const nextConfig = {
+  images: { formats: ['image/avif', 'image/webp'] },
   eslint: {
     ignoreDuringBuilds: true,
   },
@@ -14,41 +15,16 @@ const nextConfig = {
             key: 'Content-Security-Policy',
             value: `
               default-src 'self';
-              script-src 'self' 'unsafe-inline' ${isDev ? "'unsafe-eval'" : ''} 
-                https://gc.kis.v2.scr.kaspersky-labs.com 
-                https://2checkout.com 
-                https://*.2checkout.com 
-                https://secure.2checkout.com
-                https://js.stripe.com
-                https://checkout.stripe.com;
-              style-src 'self' 'unsafe-inline' 
-                https://fonts.googleapis.com
-                https://2checkout.com
-                https://*.2checkout.com;
-              font-src 'self' 
-                https://fonts.gstatic.com 
-                https://2checkout.com 
-                https://*.2checkout.com 
-                data:;
-              img-src 'self' data: blob: 
-                https://2checkout.com 
-                https://*.2checkout.com;
-              connect-src 'self' 
-                https://gc.kis.v2.scr.kaspersky-labs.com
-                https://2checkout.com
-                https://*.2checkout.com
-                https://secure.2checkout.com
-                https://api.stripe.com
-                https://checkout.stripe.com;
-              frame-src 'self'
-                https://2checkout.com
-                https://*.2checkout.com
-                https://secure.2checkout.com
-                https://js.stripe.com
-                https://checkout.stripe.com;
+              script-src 'self' 'unsafe-inline' ${isDev ? "'unsafe-eval'" : ''} https://www.googletagmanager.com https://connect.facebook.net;
+              style-src 'self' 'unsafe-inline';
+              font-src 'self' data:;
+              img-src 'self' data: blob: https://www.google-analytics.com https://www.googletagmanager.com https://www.facebook.com;
+              connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://www.facebook.com https://connect.facebook.net;
+              frame-src 'self';
               object-src 'none';
               frame-ancestors 'none';
               base-uri 'self';
+              form-action 'self';
             `.replace(/\s{2,}/g, ' ').trim(),
           },
           {
@@ -61,7 +37,7 @@ const nextConfig = {
           },
           {
             key: 'X-Frame-Options',
-            value: 'SAMEORIGIN', // Mudei de DENY para SAMEORIGIN para permitir iframes de pagamento
+            value: 'DENY',
           },
           {
             key: 'Referrer-Policy',

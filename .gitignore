@@ -178,3 +178,6 @@ dist
 # Vite logs files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# backup local do site antigo
+_backup-site-antigo/
