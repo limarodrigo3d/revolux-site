@@ -5,6 +5,7 @@ import { NextResponse } from 'next/server';
 import { atualizarPedido, dbAtivo, getPedido, salvarPedido } from '@/lib/db';
 import { enviarEmail, esc } from '@/lib/email';
 import { brl, SITE } from '@/lib/site';
+import { notificar } from '@/lib/push';
 
 export async function POST(req: Request) {
   if (!dbAtivo() || !process.env.MP_ACCESS_TOKEN) return NextResponse.json({ ok: true });
@@ -52,6 +53,15 @@ export async function POST(req: Request) {
           await salvarPedido(novo);
           return novo;
         })();
+
+    if (pedido) {
+      await notificar({
+        titulo: `💰 Nova venda: ${pedido.produto}`,
+        corpo: `${pedido.nome || 'Cliente'} · ${brl(pedido.preco)}${pedido.cidade ? ` · ${pedido.cidade}` : ''}`,
+        url: '/painel',
+        tag: `venda-${pedido.id}`,
+      });
+    }
 
     if (pedido && process.env.EMAIL_AVISOS) {
       await enviarEmail(

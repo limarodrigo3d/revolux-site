@@ -5,6 +5,7 @@ import { STATUS, dbAtivo, diasParaVencer, listarPedidos, type PedidoDB } from '@
 import { PRODUTOS, nomeCompleto } from '@/lib/catalogo';
 import { SITE, brl } from '@/lib/site';
 import { WhatsIcon } from '@/components/Icones';
+import Notificacoes from '@/components/Notificacoes';
 import { acaoAvisado, acaoDetalhes, acaoExcluir, acaoNovo, acaoSair, acaoStatus } from './actions';
 
 export const dynamic = 'force-dynamic';
@@ -92,17 +93,21 @@ export default async function Painel({ searchParams }: { searchParams: Promise<{
         </div>
       </header>
 
-      <div className="container-x mt-6 grid gap-4 sm:grid-cols-3">
+      <div className="container-x mt-6 grid grid-cols-3 gap-2 sm:gap-4">
         {[
           ['Vendas no mês', brl(totalMes)],
           ['Pedidos para atender', String(qtdAtender)],
           ['Renovações (45 dias)', String(qtdRenovar)],
         ].map(([t, v]) => (
-          <div key={t} className="rounded-2xl border border-ink/10 bg-white p-5">
-            <p className="text-sm text-ink/60">{t}</p>
-            <p className="mt-1 font-display text-3xl font-extrabold tabular-nums">{v}</p>
+          <div key={t} className="rounded-2xl border border-ink/10 bg-white p-3 sm:p-5">
+            <p className="text-xs leading-tight text-ink/60 sm:text-sm">{t}</p>
+            <p className="mt-1 font-display text-lg font-extrabold tabular-nums sm:text-3xl">{v}</p>
           </div>
         ))}
+      </div>
+
+      <div className="container-x mt-4">
+        <Notificacoes />
       </div>
 
       <div className="container-x mt-6 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">

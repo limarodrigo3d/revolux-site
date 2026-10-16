@@ -1,10 +1,12 @@
-// Roda 1x por dia (configurado em vercel.json). Envia e-mail de lembrete ao cliente
-// 30 e 7 dias antes do vencimento e um resumo para a Revolux.
+// Roda 1x por dia às 8h de Brasília (configurado em vercel.json). Envia e-mail de lembrete ao cliente
+// 30 e 7 dias antes do vencimento, um resumo para a Revolux e a notificação "bom dia" no celular.
 // Precisa de: banco (Upstash) + Resend (RESEND_API_KEY, EMAIL_REMETENTE). Opcional: CRON_SECRET.
 import { NextResponse } from 'next/server';
 import { atualizarPedido, dbAtivo, diasParaVencer, listarPedidos } from '@/lib/db';
 import { emailAtivo, enviarEmail, esc } from '@/lib/email';
 import { SITE, waLink } from '@/lib/site';
+import { diasDeAtendimento, ocupacao, type Reserva } from '@/lib/agenda';
+import { notificar } from '@/lib/push';
 
 export const dynamic = 'force-dynamic';
 
@@ -53,6 +55,30 @@ export async function GET(req: Request) {
         `<p>Clientes com certificado vencendo:</p><ul>${vencendo.map((v) => `<li>${esc(v)}</li>`).join('')}</ul><p><a href="${SITE.url}/painel?f=renovar">Abrir o painel</a></p>`,
       );
     }
+  }
+
+  // Notificação da manhã: videochamadas de hoje + renovações da semana
+  try {
+    const hojeSP = new Date(Date.now() - 3 * 3_600_000).toISOString().slice(0, 10);
+    const hoje = diasDeAtendimento(0).includes(hojeSP) ? (await ocupacao([hojeSP]))[hojeSP] : {};
+    const chamadas = Object.entries(hoje || {})
+      .filter(([, o]) => o !== 'BLOQ')
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([hora, o]) => `${hora} ${(o as Reserva).nome.split(' ')[0]}`);
+    const semana = pedidos.filter((p) => {
+      const d = p.status === 'emitido' ? diasParaVencer(p) : null;
+      return d !== null && d >= 0 && d <= 7;
+    }).length;
+    if (chamadas.length || semana) {
+      await notificar({
+        titulo: chamadas.length ? `☀️ Bom dia! Hoje: ${chamadas.length} videochamada${chamadas.length > 1 ? 's' : ''}` : '☀️ Bom dia!',
+        corpo: [chamadas.join(' · '), semana ? `🔁 ${semana} certificado${semana > 1 ? 's vencem' : ' vence'} nesta semana` : ''].filter(Boolean).join('\n'),
+        url: chamadas.length ? '/painel/agenda' : '/painel?f=renovar',
+        tag: 'bom-dia',
+      });
+    }
+  } catch (e) {
+    console.error('Falha no resumo da manhã', e);
   }
 
   return NextResponse.json({ ok: true, enviados });

@@ -1,0 +1,16 @@
+{
+  "name": "Revolux Painel",
+  "short_name": "Revolux",
+  "description": "Pedidos, agenda e avisos da Revolux Certificado Digital",
+  "id": "/painel",
+  "start_url": "/painel",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#EEF1F5",
+  "theme_color": "#14213D",
+  "lang": "pt-BR",
+  "icons": [
+    { "src": "/icons/painel-180.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "/icons/painel-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}
