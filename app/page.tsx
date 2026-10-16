@@ -53,7 +53,7 @@ export default function Home() {
             <p className="mt-2 pl-1 text-[15px] text-ink/60">do Oiapoque ao Chuí, sem sair de casa</p>
             <h1 className="display mt-6 text-[2.65rem] sm:text-7xl lg:text-[5.6rem]">Certificado digital sem balcão.</h1>
             <p className="mt-6 max-w-xl text-lg leading-relaxed text-ink/75 md:text-xl">
-              e-CPF, e-CNPJ e Bird ID emitidos por videochamada, de qualquer cidade do país. Você compra aqui e uma pessoa de verdade cuida do resto com você.
+              e-CPF, e-CNPJ e Bird ID (certificado no celular) emitidos por videochamada, de qualquer cidade do país. Você compra aqui e uma pessoa de verdade cuida do resto com você.
             </p>
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
               <Link href="/certificados" className="btn-primary px-8 py-4 text-[17px]">

@@ -30,6 +30,8 @@ export type PedidoDB = {
   pagamentoId?: string;
   pagoEm?: number;
   agendadoPara?: string; // texto livre, ex.: "15/10 às 14h"
+  agendaData?: string; // AAAA-MM-DD do horário reservado pelo site
+  agendaHora?: string; // HH:MM
   emitidoEm?: number;
   validade?: string; // AAAA-MM-DD
   avisos?: string[]; // marcações de lembrete enviados, ex.: "30d", "7d", "manual:2026-10-14"
@@ -41,7 +43,7 @@ const TOKEN = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TO
 
 export const dbAtivo = () => Boolean(URL_ && TOKEN);
 
-async function cmd<T = unknown>(comandos: (string | number)[][]): Promise<T[]> {
+export async function cmd<T = unknown>(comandos: (string | number)[][]): Promise<T[]> {
   const res = await fetch(`${URL_.replace(/\/$/, '')}/pipeline`, {
     method: 'POST',
     headers: { Authorization: `Bearer ${TOKEN}`, 'Content-Type': 'application/json' },

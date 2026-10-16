@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import type { ReactNode } from 'react';
-import { brl, waLink } from '@/lib/site';
+import { SITE, brl, waLink } from '@/lib/site';
 import type { Produto } from '@/lib/catalogo';
 import type { Pergunta } from '@/lib/faq';
 import { Check, WhatsIcon } from './Icones';
@@ -64,7 +64,7 @@ export function ProdutoCard({ p }: { p: Produto }) {
 
       <div className="mt-auto pt-7">
         <Link href={`/checkout?p=${p.id}`} className={`w-full ${p.destaque ? 'btn-primary' : 'btn-navy'}`}>
-          Comprar {p.nome}
+          Comprar {p.nome}{/A3/.test(p.nome) && ` (${p.midia.split(' ')[0].toLowerCase()})`}
         </Link>
       </div>
     </article>
@@ -134,7 +134,7 @@ export function CtaFinal({ titulo = 'Seu próximo certificado não precisa de fi
       <Carimbo className="pointer-events-none absolute -right-16 top-1/2 h-[22rem] w-[22rem] -translate-y-1/2 rotate-[-10deg] text-white/15" centro="SEM FILA" />
       <div className="container-x relative py-16 md:py-24">
         <h2 className="display max-w-3xl text-4xl text-white md:text-6xl">{titulo}</h2>
-        <p className="mt-4 max-w-xl text-lg text-white/80">Fale com uma pessoa de verdade e resolva hoje, de onde estiver.</p>
+        <p className="mt-4 max-w-xl text-lg text-white/80">Compre a qualquer hora e já escolha o horário da sua videochamada. Atendimento {SITE.horario.toLowerCase()}.</p>
         <div className="mt-8 flex flex-col gap-3 sm:flex-row">
           <a href={waLink(msg || 'Olá! Vim pelo site e quero emitir meu certificado digital.')} target="_blank" rel="noopener noreferrer" className="btn-wa px-7 py-4">
             <WhatsIcon /> Chamar no WhatsApp

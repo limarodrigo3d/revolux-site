@@ -82,6 +82,7 @@ export default async function Painel({ searchParams }: { searchParams: Promise<{
         <div className="container-x flex flex-wrap items-center justify-between gap-3 py-4">
           <p className="font-display text-lg font-bold">Revolux · Painel</p>
           <div className="flex items-center gap-2 text-sm">
+            <Link href="/painel/agenda" className="rounded-lg bg-white/10 px-3 py-2 font-semibold hover:bg-white/20">Agenda</Link>
             <a href="/api/painel/csv" className="rounded-lg px-3 py-2 hover:bg-white/10">Baixar planilha</a>
             <Link href="/" className="rounded-lg px-3 py-2 hover:bg-white/10">Ver site</Link>
             <form action={acaoSair}>
@@ -226,6 +227,7 @@ export default async function Painel({ searchParams }: { searchParams: Promise<{
                     {dias !== null && ` (${dias < 0 ? `há ${-dias} d` : `${dias} d`})`}
                   </span>
                 )}
+                {p.agendadoPara && p.status !== 'emitido' && <span className="text-sm font-semibold text-violet-900">📅 {p.agendadoPara}</span>}
                 <span className="text-sm tabular-nums text-ink/50">{data(p.criadoEm)}</span>
                 <span className="font-display font-bold tabular-nums">{brl(p.preco)}</span>
               </summary>

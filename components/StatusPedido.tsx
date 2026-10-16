@@ -7,6 +7,7 @@ import { SITE, waLink } from '@/lib/site';
 import { documentosDoProduto } from '@/lib/documentos';
 import { track } from '@/lib/track';
 import { WhatsIcon } from './Icones';
+import Agendamento from './Agendamento';
 
 type Tipo = 'sucesso' | 'pendente' | 'erro';
 
@@ -40,6 +41,8 @@ const textos: Record<Tipo, { cor: string; selo: string; titulo: string; sub: str
 export default function StatusPedido({ tipo }: { tipo: Tipo }) {
   const [pedido, setPedido] = useState<Pedido | null>(null);
   const [mpId, setMpId] = useState('');
+  const [agendaOk, setAgendaOk] = useState(true); // false = sem agenda no site, agenda pelo WhatsApp
+  const [quando, setQuando] = useState('');
   const t = textos[tipo];
 
   useEffect(() => {
@@ -62,6 +65,8 @@ export default function StatusPedido({ tipo }: { tipo: Tipo }) {
   let mensagem = `Olá! ${t.status}`;
   if (pedido) mensagem = mensagemPedido(pedido, t.status);
   if (mpId) mensagem += `\n\n*ID do pagamento (Mercado Pago):* ${mpId}`;
+  if (quando) mensagem = mensagem.replace('Quero agendar a minha videoconferência.', `*Videochamada marcada:* ${quando}\n\nVou enviar as fotos dos documentos.`);
+  const agendaNoSite = !SITE.agendaUrl && agendaOk && !!pedido;
 
   return (
     <section className="bg-paper py-16 md:py-24">
@@ -97,8 +102,14 @@ export default function StatusPedido({ tipo }: { tipo: Tipo }) {
                 </ul>
               </li>
               <li className="rounded-2xl border border-ink/10 p-5">
-                <p className="font-display font-bold">2. {SITE.agendaUrl ? 'Escolha o dia e o horário da sua videoconferência' : 'Agende sua videoconferência pelo WhatsApp'}</p>
-                {SITE.agendaUrl ? (
+                <p className="font-display font-bold">
+                  2. {quando ? 'Videochamada marcada!' : agendaNoSite || SITE.agendaUrl ? 'Escolha o dia e o horário da sua videochamada' : 'Agende sua videoconferência pelo WhatsApp'}
+                </p>
+                {quando ? (
+                  <p className="mt-3 rounded-xl bg-selo/10 p-4 font-display text-lg font-bold text-ink">{quando}</p>
+                ) : agendaNoSite && pedido ? (
+                  <Agendamento pedido={pedido} onAgendado={setQuando} onIndisponivel={() => setAgendaOk(false)} />
+                ) : SITE.agendaUrl ? (
                   <a href={SITE.agendaUrl} target="_blank" rel="noopener noreferrer" className="btn-primary mt-4 w-full">
                     Ver horários disponíveis
                   </a>
@@ -108,12 +119,12 @@ export default function StatusPedido({ tipo }: { tipo: Tipo }) {
                   </a>
                 )}
               </li>
-              {SITE.agendaUrl && (
+              {(quando || agendaNoSite || SITE.agendaUrl) && (
                 <li className="rounded-2xl border border-ink/10 p-5">
                   <p className="font-display font-bold">3. Envie as fotos dos documentos</p>
                   <p className="mt-1 text-sm text-ink/65">Assim conferimos tudo antes da chamada e ela fica bem rápida.</p>
                   <a href={waLink(mensagem)} target="_blank" rel="noopener noreferrer" className="btn-wa mt-4 w-full">
-                    <WhatsIcon /> Enviar pelo WhatsApp
+                    <WhatsIcon /> {quando ? 'Confirmar no WhatsApp e enviar documentos' : 'Enviar pelo WhatsApp'}
                   </a>
                 </li>
               )}

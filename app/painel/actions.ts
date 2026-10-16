@@ -5,6 +5,7 @@ import { revalidatePath } from 'next/cache';
 import { entrar, logado, sair, senhaCorreta } from '@/lib/auth';
 import { atualizarPedido, excluirPedido, getPedido, salvarPedido, somarMeses, type Status } from '@/lib/db';
 import { getProduto, nomeCompleto } from '@/lib/catalogo';
+import { bloquear, desbloquear, liberar } from '@/lib/agenda';
 
 async function exigirLogin() {
   if (!(await logado())) redirect('/painel/entrar');
@@ -32,6 +33,10 @@ export async function acaoStatus(f: FormData) {
   if (!atual) return;
   const patch: Parameters<typeof atualizarPedido>[1] = { status };
   if (status === 'pago' && !atual.pagoEm) patch.pagoEm = Date.now();
+  if (status === 'cancelado' && atual.agendaData && atual.agendaHora) {
+    await liberar(atual.agendaData, atual.agendaHora, atual.id);
+    Object.assign(patch, { agendaData: undefined, agendaHora: undefined });
+  }
   if (status === 'emitido' && !atual.emitidoEm) {
     patch.emitidoEm = Date.now();
     const meses = getProduto(atual.produtoId)?.validadeMeses;
@@ -64,7 +69,10 @@ export async function acaoAvisado(f: FormData) {
 
 export async function acaoExcluir(f: FormData) {
   await exigirLogin();
-  await excluirPedido(txt(f, 'id', 40));
+  const id = txt(f, 'id', 40);
+  const p = await getPedido(id);
+  if (p?.agendaData && p.agendaHora) await liberar(p.agendaData, p.agendaHora, p.id);
+  await excluirPedido(id);
   revalidatePath('/painel');
 }
 
@@ -93,4 +101,40 @@ export async function acaoNovo(f: FormData) {
   });
   revalidatePath('/painel');
   redirect('/painel');
+}
+
+// ---- Agenda ----
+const dataOk = (s: string) => /^\d{4}-\d{2}-\d{2}$/.test(s);
+const horaOk = (s: string) => s === 'dia' || /^\d{2}:\d{2}$/.test(s);
+
+export async function acaoBloquear(f: FormData) {
+  await exigirLogin();
+  const data = txt(f, 'data', 10);
+  const hora = txt(f, 'hora', 5) || 'dia';
+  if (dataOk(data) && horaOk(hora)) await bloquear(data, hora);
+  revalidatePath('/painel/agenda');
+}
+
+export async function acaoDesbloquear(f: FormData) {
+  await exigirLogin();
+  const data = txt(f, 'data', 10);
+  const hora = txt(f, 'hora', 5) || 'dia';
+  if (dataOk(data) && horaOk(hora)) await desbloquear(data, hora);
+  revalidatePath('/painel/agenda');
+}
+
+/** Desmarca a videochamada de um cliente e libera o horário para outra pessoa. */
+export async function acaoDesmarcar(f: FormData) {
+  await exigirLogin();
+  const data = txt(f, 'data', 10);
+  const hora = txt(f, 'hora', 5);
+  const pedido = txt(f, 'pedido', 40);
+  if (!dataOk(data) || !horaOk(hora)) return;
+  await liberar(data, hora);
+  const p = pedido ? await getPedido(pedido) : null;
+  if (p && p.agendaData === data && p.agendaHora === hora) {
+    await atualizarPedido(p.id, { agendaData: undefined, agendaHora: undefined, agendadoPara: '', status: p.status === 'agendado' ? 'pago' : p.status });
+  }
+  revalidatePath('/painel/agenda');
+  revalidatePath('/painel');
 }
