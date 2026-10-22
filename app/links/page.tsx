@@ -4,7 +4,7 @@ import type { Metadata } from 'next';
 import type { ComponentType } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Award, BookOpen, HelpCircle, MapPin, RefreshCw, ShieldCheck, ShoppingCart, Star } from 'lucide-react';
+import { Award, BookOpen, Globe, HelpCircle, MapPin, RefreshCw, ShieldCheck, ShoppingCart, Star } from 'lucide-react';
 import { SITE, brl, waLink } from '@/lib/site';
 import { MENOR_PRECO } from '@/lib/catalogo';
 import { Instagram, Seta, WhatsIcon } from '@/components/Icones';
@@ -26,6 +26,7 @@ const LINKS: Item[] = [
   { titulo: 'Não sei qual escolher', sub: 'Descubra em 3 perguntas', href: utm('/qual-certificado'), Icone: HelpCircle, cor: 'bg-amber-100 text-amber-700' },
   { titulo: 'Renovar meu certificado', sub: 'Sem sair de casa, por vídeo', href: utm('/renovacao'), Icone: RefreshCw, cor: 'bg-selo-50 text-selo' },
   { titulo: 'Dúvidas frequentes', sub: 'Documentos, prazos, A1 ou A3', href: utm('/duvidas'), Icone: BookOpen, cor: 'bg-navy-50 text-navy' },
+  { titulo: 'Visitar o site', sub: 'www.revoluxcd.com.br', href: utm('/'), Icone: Globe, cor: 'bg-carimbo-50 text-carimbo' },
 ];
 
 const SELOS = [
